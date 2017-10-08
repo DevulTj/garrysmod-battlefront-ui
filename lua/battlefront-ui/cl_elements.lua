@@ -171,6 +171,11 @@ function FRAME:setUp()
             local color = pnl.isActive and Color( 230, 230, 230 ) or pnl:IsDown() and Color( 255, 160, 0 ) or pnl:IsHovered() and Color( 255, 200, 0 ) or Color( 175, 175, 175 )
             local colorAlpha = 255
 
+            if not pnl.isActive and pnl:IsHovered() and (pnl.NextMove or 0) < CurTime() then
+                pnl:MoveToFront()
+                pnl.NextMove = CurTime() + 1
+            end
+
             color = Color( color.r, color.g, color.b, colorAlpha )
 
             surface.SetDrawColor( color )
