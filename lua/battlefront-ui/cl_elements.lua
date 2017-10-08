@@ -118,7 +118,7 @@ function FRAME:showAvatar()
         self.extraPlayers:SetFont( "bfUIMedium" )
         self.extraPlayers:SetExpensiveShadow( 1, Color( 0, 0, 0, 185 ) )
 
-        local buttonText = "+1"
+        local buttonText = "+" .. player.GetCount()
         self.extraPlayers.alpha = 0
         self.extraPlayers.Paint = function( pnl, w, h )
             local color = pnl.isActive and Color( 230, 230, 230 ) or pnl:IsDown() and Color( 255, 160, 0 ) or pnl:IsHovered() and Color( 255, 200, 0 ) or Color( 175, 175, 175 )
