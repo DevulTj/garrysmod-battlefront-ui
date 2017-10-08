@@ -144,7 +144,7 @@ function FRAME:setUp()
     local buttonW = 144
 
     self.elements = {}
-    for Id, data in SortedPairs( bfUI.config.ELEMENTS ) do
+    for Id, data in pairs( bfUI.config.ELEMENTS ) do
         self.elements[ Id ] = self.buttonLayout:Add( "DButton" )
         local button = self.elements[ Id ]
 

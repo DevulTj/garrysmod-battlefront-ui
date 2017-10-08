@@ -51,7 +51,23 @@ bfUI.registerClientConfig( "auto_open_on_join", true, "Whether Central Menu shou
 
 bfUI.registerElement( "HOME", {
 	showGreeting = true,
-	text = [[Text with multi line support.]]
+	blocks = {
+		[ 1 ] = {
+			text = "FULLY IN-GAME CONFIGURATION",
+			sub = "FEATURING",
+			image = Material( "bfui/block_1.png" )
+		},
+		[ 2 ] = {
+			text = "BY DEVULTJ",
+			sub = "A QUALITY, OPTIMIZED SCRIPT",
+			image = Material( "bfui/block_3.png" )
+		},
+		[ 3 ] = {
+			text = "PURCHASE BATTLEFRONT UI          FOR $3.99",
+			sub = "LAST CHANCE",
+			image = Material( "bfui/block_4.png" )
+		}
+	}
 })
 
 bfUI.registerElement( "FORUMS", {

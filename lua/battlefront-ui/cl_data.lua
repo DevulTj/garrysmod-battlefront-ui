@@ -62,10 +62,19 @@ bfUI.data.playerData = getAllData()
 
 bfUI.config = bfUI.config or {}
 bfUI.config.ELEMENTS = {}
+bfUI.config.ELEMENTS_TO_ID = {}
 
 bfUI.registerElement = function( name, data )
     data = data or {}
     data.name = name
 
-    return table.insert( bfUI.config.ELEMENTS, data )
+    if bfUI.config.ELEMENTS_TO_ID[ name ] then
+        local id = bfUI.config.ELEMENTS_TO_ID[ name ]
+
+        bfUI.config.ELEMENTS[ id ] = data
+    else
+        local id = table.insert( bfUI.config.ELEMENTS, data )
+
+        bfUI.config.ELEMENTS_TO_ID[ name ] = id
+    end
 end

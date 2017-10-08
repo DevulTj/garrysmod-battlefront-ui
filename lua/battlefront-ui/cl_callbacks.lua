@@ -142,6 +142,162 @@ bfUI.addDataCheck( "servers", function( data, frame )
     end
 end )
 
+local function DrawRoundedBox( _r, _x, _y, _w, _h )
+	_r = _r > 8 and 16 or 8
+	local _u = ( _x + _r * 1 ) - _x
+	local _v = ( _y + _r * 1 ) - _y
+	
+	local points = 64
+	local slices = ( 2 * math.pi ) / points
+	local poly = {  }
+	
+	X, Y = _w-_r, _h-_r
+	
+	for i = 0, points-1 do
+		local angle = ( slices * i ) % points
+		local x = X + _r * math.cos( angle )
+		local y = Y + _r * math.sin( angle )
+		
+		if i == points/4-1 then
+			X, Y = _x+_r, _h-_r
+			table.insert( poly, { x = X, y = Y, u = _u, v = _v } )
+		elseif i == points/2-1 then
+			X, Y = _x, _r
+			table.insert( poly, { x = X, y = Y, u = _u, v = _v } )
+			X = _x+_r
+		elseif i == 3*points/4-1 then
+			X, Y = _w-_r, 0
+			table.insert( poly, { x = X, y = Y, u = _u, v = _v } )
+			Y = _r
+		end
+		
+		table.insert( poly, { x = x, y = y, u = _u, v = _v } )
+	end
+	
+	return poly
+end
+
+local maskMaterial = Material( "effects/flashlight001" )
+local function attachText( parent, blockInfo )
+    local container = parent:Add( "Panel" )
+    container:Dock( FILL )
+
+    if blockInfo.image then
+        local roundedPoly = DrawRoundedBox( 4, 0, 0, parent:GetWide(), parent:GetTall() )
+        container.Paint = function( this, w, h )
+            render.ClearStencil()
+            render.SetStencilEnable(true)
+        
+            render.SetStencilWriteMask( 1 )
+            render.SetStencilTestMask( 1 )
+        
+            render.SetStencilFailOperation( STENCILOPERATION_REPLACE )
+            render.SetStencilPassOperation( STENCILOPERATION_ZERO )
+            render.SetStencilZFailOperation( STENCILOPERATION_ZERO )
+            render.SetStencilCompareFunction( STENCILCOMPARISONFUNCTION_NEVER )
+            render.SetStencilReferenceValue( 1 )
+        
+            surface.SetMaterial( maskMaterial )
+            surface.SetDrawColor( color_black )
+            surface.DrawPoly( roundedPoly )
+                
+            render.SetStencilFailOperation( STENCILOPERATION_ZERO )
+            render.SetStencilPassOperation( STENCILOPERATION_REPLACE )
+            render.SetStencilZFailOperation( STENCILOPERATION_ZERO )
+            render.SetStencilCompareFunction( STENCILCOMPARISONFUNCTION_EQUAL )
+            render.SetStencilReferenceValue( 1 )
+        
+            surface.SetDrawColor( color_white )
+            surface.SetMaterial( blockInfo.image )
+            surface.DrawTexturedRect( 1, 1, w - 2, h - 2 )
+
+            render.SetStencilEnable(false)
+            render.ClearStencil()
+        end
+    end
+
+    local innerContainer = container:Add( "Panel" )
+    innerContainer:Dock( FILL )
+    innerContainer:DockMargin( 16, 16, 16, 16 )
+
+    local sub = innerContainer:Add( "DLabel" )
+    sub:SetText( blockInfo.sub or "" )
+    sub:SetFont( "bfUIMedium-Secondary" )
+    sub:Dock( TOP )
+    sub:SizeToContents()
+    sub:SetTextColor( color_white )
+    sub:SetExpensiveShadow( 2, Color( 0, 0, 0, 150 ) )
+
+    local title = innerContainer:Add( "DLabel" )
+    title:SetText( blockInfo.text or "" )
+    title:SetFont( "bfUIHuge-Secondary" )
+    title:Dock( FILL )
+    title:DockMargin( 0, 0, 80, 0 )
+    title:SetContentAlignment( 7 )
+    title:SetWrap( true )
+    title:SetTextColor( color_white )
+    title:SetExpensiveShadow( 2, Color( 0, 0, 0, 150 ) )
+end
+
+local blockContainerW, blockContainerH = 540 * 2, 450
+bfUI.addDataCheck( "blocks", function( data, frame )
+    local blocks = data.blocks
+    if not blocks then return end
+
+    local blockContainer = frame.panel:Add( "DPanel" )
+    blockContainer:SetSize( blockContainerW, blockContainerH )
+
+    blockContainer.Paint = function( this, w, h )
+        draw.RoundedBox( 8, 1, 1, w - 2, h - 2, Color( 200, 200, 200, 10 ) )
+        draw.RoundedBox( 8, 2, 2, w - 4, h - 4, Color( 150, 150, 150, 255 ) )
+    end
+
+    local blockOne = blockContainer:Add( "DPanel" )
+    blockOne:Dock( LEFT )
+    blockOne:DockMargin( 4, 4, 0, 4 )
+    blockOne:SetWide( blockContainerW / 2 )
+    blockOne:InvalidateParent( true )
+
+    blockOne.Paint = function( this, w, h )
+        surface.SetDrawColor( Color( 150, 150, 150, 255 ) )
+        surface.DrawRect( w - 1, 0, 1, h )
+    end
+
+    attachText( blockOne, blocks[ 1 ] )
+
+    local blockTwo = blockContainer:Add( "DPanel" )
+    blockTwo:Dock( TOP )
+    blockTwo:DockMargin( 0, 4, 4, 0 )
+    blockTwo:SetTall( blockContainerH / 2 )
+    blockTwo:InvalidateParent( true )
+
+    blockTwo.Paint = function( this, w, h )
+        surface.SetDrawColor( Color( 150, 150, 150, 255 ) )
+        surface.DrawRect( 0, 0, 1, h )
+
+        surface.SetDrawColor( Color( 150, 150, 150, 255 ) )
+        surface.DrawRect( 0, h - 1, w, 1 )
+    end
+
+    attachText( blockTwo, blocks[ 2 ] )
+
+    local blockThree = blockContainer:Add( "DPanel" )
+    blockThree:Dock( FILL )
+    blockThree:DockMargin( 0, 0, 4, 4 )
+    blockThree:SetTall( blockContainerH / 2 )
+    blockThree:InvalidateParent( true )
+
+    blockThree.Paint = function( this, w, h )
+        surface.SetDrawColor( Color( 150, 150, 150, 255 ) )
+        surface.DrawRect( 0, 0, 1, h )
+
+        surface.SetDrawColor( Color( 150, 150, 150, 255 ) )
+        surface.DrawRect( 0, 0, w, 1 )
+    end
+
+    attachText( blockThree, blocks[ 3 ] )
+end )
+
 local gradient = Material( "gui/gradient" )
 bfUI.addDataCheck( "showGreeting", function( _, frame )
 
