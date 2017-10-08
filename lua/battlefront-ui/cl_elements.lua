@@ -136,7 +136,12 @@ function FRAME:setUp()
 
     end
 
-    self.panel = self:Add( "EditablePanel" )
+    self.footer = self:Add( "Panel" )
+    self.footer:Dock( BOTTOM )
+    self.footer:DockMargin( 24, 0, 0, 32 )
+    self.footer:SetTall( 40 )
+
+    self.panel = self:Add( "Panel" )
     self.panel:Dock( FILL )
     self.panel:DockMargin( 20, 12, 0, 0 )
     self.panel.Paint = function( pnl, w, h ) end
@@ -163,7 +168,7 @@ function FRAME:setUp()
 
         button.alpha = 0
         button.Paint = function( pnl, w, h )
-            local color = pnl.isActive and Color( 230, 230, 230 ) or pnl:IsHovered() and Color( 255, 200, 0 ) or Color( 175, 175, 175 )
+            local color = pnl.isActive and Color( 230, 230, 230 ) or pnl:IsDown() and Color( 255, 160, 0 ) or pnl:IsHovered() and Color( 255, 200, 0 ) or Color( 175, 175, 175 )
             local colorAlpha = 255
 
             color = Color( color.r, color.g, color.b, colorAlpha )
@@ -218,6 +223,15 @@ function FRAME:setUp()
         end
     end
 
+    self.quit = self.footer:Add( "bfUIButton" )
+    self.quit:Dock( LEFT )
+    self.quit:SetSize( 128 )
+    self.quit:SetText( "QUIT" )
+
+    self.quit.DoClick = function( this )
+        self:fadeOut()
+    end
+
     local firstElement = bfUI.config.ELEMENTS[ 1 ]
     if firstElement then bfUI.getCallback( firstElement, self ) end
 end
@@ -251,35 +265,6 @@ function BUTTON:PaintOver()
 end
 
 derma.DefineControl( "bfUIDialogueButton", nil, BUTTON, "DButton" )
-
-
-local BUTTON = {}
-
-function BUTTON:Init()
-    self:SetFont( "bfUIMedium" )
-end
-
-function BUTTON:Paint( w, h )
-    local buttonColor = bfUI.getClientData( "button_bg_color", color_white )
-
-    local isHovered = self:IsHovered()
-    local xOverride, yOverride, wOverride, hOverride = self.xOverride or 0, self.yOverride or 0, self.wOverride or w, self.hOverride or h
-    draw.RoundedBox( 0, xOverride, yOverride, wOverride, hOverride, Color( buttonColor.r, buttonColor.g, buttonColor.b, isHovered and 255 or 0 ) )
-
-    surface.SetDrawColor( Color( buttonColor.r, buttonColor.g, buttonColor.b, 255 ) )
-    surface.DrawOutlinedRect( xOverride, yOverride, wOverride, hOverride )
-
-    self:SetTextColor( isHovered and bfUI.getClientData( "button_text_color_inverted", color_black ) or bfUI.getClientData( "button_text_color", color_white ) )
-end
-
-function BUTTON:PaintOver()
-    local pressed = self.Depressed or self.m_bSelected
-
-    self.xOverride, self.yOverride = pressed and 1 or nil, pressed and 1 or nil
-    self.wOverride, self.hOverride = pressed and ( self:GetWide() - 2 ) or nil, pressed and ( self:GetTall() - 2 ) or nil
-end
-
-derma.DefineControl( "bfUIButton", nil, BUTTON, "DButton" )
 
 FRAME = {}
 
