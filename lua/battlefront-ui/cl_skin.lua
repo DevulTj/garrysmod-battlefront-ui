@@ -8,6 +8,7 @@
 
 hook.Add( "loadFonts" , "fonts", function()
 	local fontFace = bfUI.getClientData( "font", "FuturaBT-Book" )
+	local secondaryFontFace = bfUI.getClientData( "font_secondary", "Roboto Condensed" )
 
 	surface.CreateFont( "bfUILarge", {
 		font = fontFace,
@@ -28,6 +29,29 @@ hook.Add( "loadFonts" , "fonts", function()
 		size = 24,
 		weight = 500,
 		antialias = true
+	} )
+
+	surface.CreateFont( "bfUIMedium-Secondary", {
+		font = secondaryFontFace,
+		size = 24,
+		weight = 500,
+		antialias = true
+	} )
+
+	surface.CreateFont( "bfUIMedium-Blurred", {
+		font = fontFace,
+		size = 24,
+		weight = 500,
+		antialias = true,
+		blursize = 2
+	} )
+
+	surface.CreateFont( "bfUIMedium-Secondary-Blurred", {
+		font = secondaryFontFace,
+		size = 24,
+		weight = 500,
+		antialias = true,
+		blursize = 2
 	} )
 
 	surface.CreateFont( "bfUISmall", {

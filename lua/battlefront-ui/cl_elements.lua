@@ -148,11 +148,10 @@ function FRAME:setUp()
         self.elements[ Id ] = self.buttonLayout:Add( "DButton" )
         local button = self.elements[ Id ]
 
-        button:SetText(
-        bfUI.getUnEditableData( "element_title_force_uppercase", false ) and string.upper( data.name )
-        or data.name )
-
+        button:SetText( "" )
         button:Dock( LEFT )
+
+        local buttonText = bfUI.getUnEditableData( "element_title_force_uppercase", false ) and string.upper( data.name ) or data.name
 
         if Id > 1 then
             button:DockMargin( -2, 0, 0, 0 )
@@ -164,7 +163,12 @@ function FRAME:setUp()
 
         button.alpha = 0
         button.Paint = function( pnl, w, h )
-            surface.SetDrawColor( color_white )
+            local color = pnl.isActive and Color( 230, 230, 230 ) or pnl:IsHovered() and Color( 255, 200, 0 ) or Color( 175, 175, 175 )
+            local colorAlpha = 255
+
+            color = Color( color.r, color.g, color.b, colorAlpha )
+
+            surface.SetDrawColor( color )
             surface.DrawRect( 0, 0, 2, h - 5 )
             surface.DrawRect( w - 2, 0, 2, h - 5 )
 
@@ -178,6 +182,9 @@ function FRAME:setUp()
                 surface.SetDrawColor( Color( 150, 150, 150, 50 ) )
                 surface.DrawRect( 2, 0, w - 4, h - 5 )
             end
+
+            draw.SimpleText( buttonText, "bfUIMedium-Secondary", w / 2, h / 2, color, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+            draw.SimpleText( buttonText, "bfUIMedium-Secondary-Blurred", w / 2, h / 2, Color( color.r, color.g, color.b, 150 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
         end
 
         local customCheck = data.customCheck and data.customCheck( LocalPlayer(), button )

@@ -29,7 +29,11 @@ bfUI.registerClientConfig( "fade_time", 0.5, "Fade time for animations within th
 bfUI.registerClientConfig( "element_pressed_fade_time", 0.5, "Fade time for when you press an element button", nil, { category = "appearance" } )
 
 bfUI.registerClientConfig( "font", "Futura ICG", "The theme's font", function( _, newFont )
-	hook.Call( "loadFonts", nil, newFont )
+	hook.Call( "loadFonts" )
+end, { category = "appearance" } )
+
+bfUI.registerClientConfig( "font_secondary", "Roboto Condensed", "The theme's secondary font", function( _, newFont )
+	hook.Call( "loadFonts" )
 end, { category = "appearance" } )
 
 bfUI.registerClientConfig( "element_button_color", Color( 255, 255, 255 ), "Button colour within the theme", nil, { category = "element button appearance" } )
