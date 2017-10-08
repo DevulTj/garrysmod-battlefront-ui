@@ -67,6 +67,13 @@ hook.Add( "loadFonts" , "fonts", function()
 		weight = 500,
 		antialias = true
 	} )
+
+	surface.CreateFont( "bfUISmall-Secondary", {
+		font = secondaryFontFace,
+		size = 18,
+		weight = 500,
+		antialias = true
+	} )
 end )
 
 hook.Call( "loadFonts" )

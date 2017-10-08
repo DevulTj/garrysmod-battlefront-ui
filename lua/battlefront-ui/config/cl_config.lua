@@ -55,7 +55,7 @@ bfUI.registerElement( "HOME", {
 		[ 1 ] = {
 			text = "FULLY IN-GAME CONFIGURATION",
 			sub = "FEATURING",
-			image = Material( "bfui/block_1.png" )
+			image = Material( "bfui/block_2.png" )
 		},
 		[ 2 ] = {
 			text = "BY DEVULTJ",

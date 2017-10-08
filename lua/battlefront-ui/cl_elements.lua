@@ -83,6 +83,97 @@ function FRAME:refreshBackground()
     self.backgroundMaterial = Material( backgroundMaterial )
 end
 
+function FRAME:showAvatar()
+    if bfUI.getClientData( "show_avatar", true ) then
+        -- Avatar, party place
+        self.headerContainer = self:Add( "Panel" )
+        self.headerContainer:SetSize( 512, 32 )
+        self.headerContainer:SetPos( 52, 32 )
+
+        self.leftAvatarBound = self.headerContainer:Add( "DPanel" )
+        self.leftAvatarBound:Dock( LEFT )
+        self.leftAvatarBound:SetWide( 1 )
+
+        self.leftAvatarBound.Paint = function( this, w, h )
+            draw.RoundedBox( 0, 0, 0, w, h, Color( 255, 255, 255, 100 ) ) 
+        end
+
+        self.avatarImage = self.headerContainer:Add( "AvatarImage" )
+        self.avatarImage:Dock( LEFT )
+        self.avatarImage:SetWide( 32 )
+        self.avatarImage:SetPlayer( LocalPlayer(), 64 )
+
+        self.rightAvatarBound = self.headerContainer:Add( "DPanel" )
+        self.rightAvatarBound:Dock( LEFT )
+        self.rightAvatarBound:SetWide( 1 )
+
+        self.rightAvatarBound.Paint = self.leftAvatarBound.Paint
+
+        self.extraPlayers = self.headerContainer:Add( "DButton" )
+        self.extraPlayers:SetText( "" )
+        self.extraPlayers:Dock( LEFT )
+        self.extraPlayers:DockMargin( 16, 0, 0, 0 )
+
+        self.extraPlayers:SetWide( 40 )
+        self.extraPlayers:SetFont( "bfUIMedium" )
+        self.extraPlayers:SetExpensiveShadow( 1, Color( 0, 0, 0, 185 ) )
+
+        local buttonText = "+1"
+        self.extraPlayers.alpha = 0
+        self.extraPlayers.Paint = function( pnl, w, h )
+            local color = pnl.isActive and Color( 230, 230, 230 ) or pnl:IsDown() and Color( 255, 160, 0 ) or pnl:IsHovered() and Color( 255, 200, 0 ) or Color( 175, 175, 175 )
+            local colorAlpha = 255
+
+            color = Color( color.r, color.g, color.b, colorAlpha )
+
+            surface.SetDrawColor( color )
+            surface.DrawRect( 0, 0, 1, h )
+            surface.DrawRect( w - 1, 0, 1, h )
+
+            draw.SimpleText( buttonText, "bfUIMedium-Secondary", w / 2, h / 2, color, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+            draw.SimpleText( buttonText, "bfUIMedium-Secondary-Blurred", w / 2, h / 2, Color( color.r, color.g, color.b, 150 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+        end
+    end
+end
+
+local darkRPMoney = Material( "bfui/money.png" )
+local pointshopMoney = Material( "bfui/creditcard.png" )
+function FRAME:showCurrency()
+    self.currencyLayout = self:Add( "Panel" )
+    self.currencyLayout:SetSize( 400, 32 )
+    self.currencyLayout:SetPos( self:GetWide() - self.currencyLayout:GetWide() - 52, 32 )
+
+    self.pointshopMoney = self.currencyLayout:Add( "DButton" )
+    self.pointshopMoney:Dock( RIGHT )
+    self.pointshopMoney:SetWide( 128 )
+    self.pointshopMoney:SetText( "" )
+    self.pointshopMoney.Paint = function( this, w, h )
+        surface.SetMaterial( pointshopMoney )
+        surface.SetDrawColor( color_white )
+        surface.DrawTexturedRect( 0, 8, 16, 16 )
+
+        local moneyText = "200"
+
+        draw.SimpleText( moneyText, "bfUIMedium-Secondary", w / 2, h / 2 + 1, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+        //draw.SimpleText( moneyText, "bfUIMedium-Secondary-Blurred", w / 2, h / 2, Color( 255, 255, 255, 150 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    end
+
+    self.darkRPMoney = self.currencyLayout:Add( "DButton" )
+    self.darkRPMoney:Dock( RIGHT )
+    self.darkRPMoney:SetWide( 128 )
+    self.darkRPMoney:SetText( "" )
+    self.darkRPMoney.Paint = function( this, w, h )
+        surface.SetMaterial( darkRPMoney )
+        surface.SetDrawColor( color_white )
+        surface.DrawTexturedRect( 0, 8, 16, 16 )
+
+        local moneyText = "5,000"
+
+        draw.SimpleText( moneyText, "bfUIMedium-Secondary", w / 2, h / 2 + 1, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+        //draw.SimpleText( moneyText, "bfUIMedium-Secondary-Blurred", w / 2, h / 2, Color( 255, 255, 255, 150 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    end
+end
+
 function FRAME:setUp()
     self:refreshBackground()
 
@@ -127,7 +218,7 @@ function FRAME:setUp()
 
     self.buttonLayout = self:Add( "DIconLayout" )
     self.buttonLayout:Dock( TOP )
-    self.buttonLayout:DockMargin( 24, 48, 0, 0 )
+    self.buttonLayout:DockMargin( 24, 64, 0, 0 )
     self.buttonLayout:DockPadding( 0, 0, 0, 16 )
     self.buttonLayout:SetTall( 64 )
     self.buttonLayout:SetSpaceX( 4 )
@@ -236,6 +327,24 @@ function FRAME:setUp()
     self.quit.DoClick = function( this )
         self:fadeOut()
     end
+
+    -- Render avatar layout
+    self:showAvatar()
+
+    -- Render currency layout
+    self:showCurrency()
+
+    -- Render WIP
+    self.warning = self:Add( "DButton" )
+    self.warning:SetSize( 256, 40 )
+    self.warning:SetPos( self:GetWide() - 256 - 100, 96 )
+    self.warning:SetText( "WORK IN PROGRESS" )
+    self.warning:SetFont( "bfUISmall-Secondary" )
+    self.warning:SetTextColor( color_white )
+    self.warning.Paint = function( this, w, h )
+        draw.RoundedBox( 8, 0, 0, w, h, Color( 20, 20, 20, 100 ) )
+    end
+    
 
     local firstElement = bfUI.config.ELEMENTS[ 1 ]
     if firstElement then bfUI.getCallback( firstElement, self ) end

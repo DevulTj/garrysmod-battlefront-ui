@@ -183,7 +183,7 @@ local function attachText( parent, blockInfo )
     container:Dock( FILL )
 
     if blockInfo.image then
-        local roundedPoly = DrawRoundedBox( 4, 0, 0, parent:GetWide(), parent:GetTall() )
+        local roundedPoly = DrawRoundedBox( 8, 0, 0, parent:GetWide(), parent:GetTall() )
         container.Paint = function( this, w, h )
             render.ClearStencil()
             render.SetStencilEnable(true)
