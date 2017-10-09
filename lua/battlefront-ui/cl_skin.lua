@@ -24,6 +24,28 @@ hook.Add( "loadFonts" , "fonts", function()
 		antialias = true
 	} )
 
+	surface.CreateFont( "bfUILarge-Secondary", {
+		font = secondaryFontFace,
+		size = 32,
+		weight = 500,
+		antialias = true
+	} )
+
+	surface.CreateFont( "bfUIMediumLarge-Secondary", {
+		font = secondaryFontFace,
+		size = 28,
+		weight = 500,
+		antialias = true
+	} )
+
+	surface.CreateFont( "bfUIMediumLarge-Secondary-Blurred", {
+		font = secondaryFontFace,
+		size = 28,
+		weight = 500,
+		antialias = true,
+		blursize = 2
+	} )
+
 	surface.CreateFont( "bfUILargeThin", {
 		font = fontFace,
 		size = 30,

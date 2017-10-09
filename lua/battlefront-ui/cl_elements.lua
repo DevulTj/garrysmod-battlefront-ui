@@ -196,7 +196,7 @@ function FRAME:setUp()
 
     self.panel = self:Add( "Panel" )
     self.panel:Dock( FILL )
-    self.panel:DockMargin( 20, 12, 0, 0 )
+    self.panel:DockMargin( 20, 12, 54, 32 )
     self.panel.Paint = function( pnl, w, h ) end
 
     local buttonW = 144
@@ -279,6 +279,10 @@ function FRAME:setUp()
             pnl.isActive = true
             pnl:MoveToFront()
         end
+
+        if Id == 1 then
+            button.isActive = true
+        end
     end
 
     self.quit = self.footer:Add( "bfUIButton" )
@@ -306,7 +310,9 @@ function FRAME:setUp()
     
 
     local firstElement = bfUI.config.ELEMENTS[ 1 ]
-    if firstElement then bfUI.getCallback( firstElement, self ) end
+    if firstElement then 
+        bfUI.getCallback( firstElement, self )
+    end
 end
 
 derma.DefineControl( "bfUIFrame", nil, FRAME, "DFrame" )
@@ -426,177 +432,6 @@ bfUI.createDialogue = function( title, text, option1, callback1, option2, callba
 
     bfUI.dialogueFrame:SetAlpha( 0 )
     bfUI.dialogueFrame:AlphaTo( 255, bfUI.getClientData( "fade_time", 0.5 ), 0 )
-end
-
-FRAME = {}
-
-function FRAME:Init()
-    self:StretchToParent( 0, 0, 0, 0 )
-    self:SetDraggable( false )
-    self:ShowCloseButton( false )
-
-    self:SetTitle( "" )
-
-    self:MakePopup()
-end
-
-function FRAME:Paint( w, h )
-    draw.RoundedBox( 0, 0, 0, w, h, Color( 0, 0, 0, 200 ) )
-
-    surface.SetMaterial( blur )
-    surface.SetDrawColor( color_white )
-
-    local x, y = self:LocalToScreen( 0, 0 )
-
-    for i = 0.2, 1, 0.2 do
-        blur:SetFloat( "$blur", i * 4 )
-        blur:Recompute()
-
-        render.UpdateScreenEffectTexture()
-        surface.DrawTexturedRect( x * - 1, y * - 1, ScrW(), ScrH() )
-    end
-end
-
-function FRAME:setUp()
-    self.container = self:Add( "Panel" )
-    self.container:SetSize( ScrH() * 0.75, ScrH() * 0.75 )
-    self.container:Center()
-
-    self.title = self.container:Add( "DLabel" )
-    self.title:Dock( TOP )
-    self.title:SetText( "SETTINGS" )
-    self.title:SetFont( "bfUILarge" )
-    self.title:SetTextColor( color_white )
-    self.title:SetContentAlignment( 4 )
-    self.title:SetHeight( 20 )
-
-    self.spacer = self.container:Add( "DPanel" )
-    self.spacer:Dock( TOP )
-    self.spacer:DockMargin( 0, 8, 0, 0 )
-    self.spacer:SetHeight( 1 )
-
-    self.spacer.Paint = function( pnl, w, h )
-        surface.SetDrawColor( color_white )
-        surface.SetMaterial( gradient )
-        surface.DrawTexturedRect( 0, 0, w, h )
-    end
-
-    self.closeBtn = self.container:Add( "bfUIDialogueButton" )
-    self.closeBtn:Dock( BOTTOM )
-    self.closeBtn:DockMargin( 0, 4, 0, 0 )
-    self.closeBtn:SetText( "CLOSE" )
-    self.closeBtn:SetHeight( 40 )
-    self.closeBtn.DoClick = function( pnl )
-        self:Close()
-    end
-
-    self.resetBtn = self.container:Add( "bfUIDialogueButton" )
-    self.resetBtn:Dock( BOTTOM )
-    self.resetBtn:DockMargin( 0, 4, 0, 4 )
-    self.resetBtn:SetText( "RESET TO DEFAULTS" )
-    self.resetBtn:SetHeight( 40 )
-    self.resetBtn.DoClick = function( pnl )
-        bfUI.createDialogue( "RESET", "Reset to defaults settings?", "YES", function( dialogue )
-            for a, b in pairs( bfUI.data.stored ) do
-                bfUI.setClientData( a, b.default )
-            end
-
-            dialogue:Close()
-
-            self:Close()
-            bfUI.createSettingsFrame()
-        end, "NO", function( dialogue ) dialogue:Close() end )
-    end
-
-    self.scroll = self.container:Add( "DScrollPanel" )
-    self.scroll:Dock( FILL )
-    self.scroll:SetSize( ScrH() * 0.75, ScrH() * 0.75 - 112 )
-    self.scroll:InvalidateParent( true )
-
-    self.properties = self.scroll:Add( "DProperties" )
-    self.properties:SetSize( self.scroll:GetSize() )
-
-    local varsSaved = {}
-    for k, v in pairs( bfUI.data.stored ) do
-        local index = v.data and v.data.category or "misc"
-
-        varsSaved[ index ] = varsSaved[ index ] or {}
-        varsSaved[ index ][ k ] = v
-    end
-
-    for category, settings in SortedPairs( varsSaved ) do
-        for k, v in SortedPairs( settings ) do
-            local form = v.data and v.data.form
-            local value = bfUI.getClientData( k, bfUI.data.stored[ k ].default )
-
-            local _type = type( value )
-
-            if not form then
-                if _type == "number" then
-                    form = "Int"
-                    value = tonumber( value )
-                elseif _type == "boolean" then
-                    form = "Boolean"
-                    value = tobool( value )
-                elseif _type == "table" then
-                    if not value.r then
-                        form = "Combo"
-                    else
-                        form = "VectorColor"
-                        value = Vector( value.r / 255, value.g / 255, value.b / 255 )
-                        _type = type( value )
-                    end
-                else
-                    form = "Generic"
-                end
-            end
-
-            local row = self.properties:CreateRow( category, k )
-            row:Setup( form, v.data and v.data.data or {} )
-            row:SetTooltip( v.description )
-
-            if form == "Combo" then
-                for _, rowValue in pairs( value ) do
-                    row:AddChoice( rowValue, rowValue, true )
-                    print(rowValue)
-                end
-            end
-
-            if form ~= "Combo" then
-                row:SetValue( value )
-            end
-
-            local beforeVal = value
-            row.DataChanged = function( this, data )
-                if form == "VectorColor" then
-                    local vector = Vector( data )
-
-                    data = Color( math.floor( vector.x * 255 ), math.floor( vector.y * 255 ), math.floor( vector.z * 255 ) )
-                elseif form == "Int" or form == "Float" then
-                    data = tonumber( data )
-
-                    if form == "Int" then
-                        data = math.Round( data )
-                    end
-                elseif form == "Boolean" then
-                    data = tobool( data )
-                end
-
-                bfUI.setClientData( k, data )
-                if v.callback then v.callback( beforeVal, data ) end
-            end
-        end
-    end
-end
-
-derma.DefineControl( "bfUISettingsFrame", nil, FRAME, "DFrame" )
-
-bfUI.createSettingsFrame = function()
-    bfUI.settingsFrame = vgui.Create( "bfUISettingsFrame" )
-    bfUI.settingsFrame:setUp()
-
-    bfUI.settingsFrame:SetAlpha( 0 )
-    bfUI.settingsFrame:AlphaTo( 255, bfUI.getClientData( "fade_time", 0.5 ), 0 )
 end
 
 BUTTON = {}

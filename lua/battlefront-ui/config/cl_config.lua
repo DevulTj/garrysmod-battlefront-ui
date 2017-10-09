@@ -14,6 +14,9 @@ Developer information: {{ user_id }} : {{ script_id }} : {{ script_version_id }}
 	3. disable the f1menu module by setting the config to `true`
 ]]
 
+bfUI.registerCategory( "general configuration", "GENERAL", Material( "bfui/cogwheel.png", "mips smooth" ) )
+bfUI.registerCategory( "appearance", "APPEARANCE", Material( "bfui/avatar.png", "mips smooth" )  )
+
 bfUI.registerUneditableConfig( "menu_key", KEY_F6 ) -- Available keys: KEY enumeration (https://wiki.garrysmod.com/page/Enums/KEY)
 bfUI.registerUneditableConfig( "background_material_disabled", false ) -- Disables material background image and uses main_color client configuration
 bfUI.registerClientConfig( "background_material", { "bfui/bfui_background.jpg" }, "The background of Battlefront UI", nil, { category = "appearance" } ) -- Material background path, make sure you FastDL/Workshop it
@@ -50,7 +53,7 @@ bfUI.registerClientConfig( "ask_on_close", true, "Whether to ask to close the fr
 bfUI.registerClientConfig( "auto_open_on_join", true, "Whether Central Menu should auto-open on join", nil, { category = "general configuration" } )
 
 bfUI.registerElement( "HOME", {
-	showGreeting = true,
+	greeting = "WELCOME TO BATTLEFRONT UI, YOU CAN SPECIFY YOUR TEXT HERE.",
 	blocks = {
 		[ 1 ] = {
 			text = "FULLY IN-GAME CONFIGURATION",
@@ -68,6 +71,8 @@ bfUI.registerElement( "HOME", {
 			image = Material( "bfui/block_4.png" )
 		}
 	},
+
+	-- Currency is global, you only have to define it once.
 	currency = {
 		{
 			image = Material( "bfui/money.png" ),
@@ -124,9 +129,6 @@ bfUI.registerElement( "RULES", {
 })
 
 bfUI.registerElement( "OPTIONS", {
-	callback = function()
-		timer.Simple( 0, function() RunConsoleCommand( "gameui_activate" ) end )
-		RunConsoleCommand( "gamemenucommand", "OpenOptionsDialog" )
-
-	end
+	greeting = "ALL OPTIONS WITHIN BATTLEFRONT UI. THEY ARE FULLY CUSTOMIZABLE IN-GAME.",
+	options = true,
 } )

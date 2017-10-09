@@ -10,6 +10,7 @@ bfUI.data = bfUI.data or {}
 
 bfUI.data.playerData = bfUI.data.playerData or {}
 bfUI.data.stored = bfUI.data.stored or {}
+bfUI.data.categories = bfUI.data.categories or {}
 
 bfUI.data.unEditableConfig = bfUI.data.unEditableConfig or {}
 
@@ -34,6 +35,10 @@ function bfUI.registerClientConfig( var, val, description, callback, data )
         description = description,
         callback = callback
     }
+end
+
+function bfUI.registerCategory( id, name, image )
+    bfUI.data.categories[ id ] = { id = id, name = name, image = image }
 end
 
 function bfUI.registerUneditableConfig( var, val )

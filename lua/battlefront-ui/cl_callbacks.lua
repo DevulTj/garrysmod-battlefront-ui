@@ -244,7 +244,11 @@ bfUI.addDataCheck( "blocks", function( data, frame )
     local blocks = data.blocks
     if not blocks then return end
 
-    local blockContainer = frame.panel:Add( "DPanel" )
+    local parentContainer = frame.panel:Add( "Panel" )
+    parentContainer:Dock( TOP )
+    parentContainer:SetTall( blockContainerH )
+
+    local blockContainer = parentContainer:Add( "DPanel" )
     blockContainer:SetSize( blockContainerW, blockContainerH )
 
     blockContainer.Paint = function( this, w, h )
@@ -299,8 +303,15 @@ bfUI.addDataCheck( "blocks", function( data, frame )
 end )
 
 local gradient = Material( "gui/gradient" )
-bfUI.addDataCheck( "showGreeting", function( _, frame )
-
+bfUI.addDataCheck( "greeting", function( data, frame )
+    frame.greeting = frame.panel:Add( "DLabel" )
+    frame.greeting:Dock( TOP )
+    frame.greeting:DockMargin( 0, 0, 0, 8 )
+    frame.greeting:SetText( data.greeting )
+    frame.greeting:SetFont( "bfUILarge-Secondary" )
+    frame.greeting:SetTextColor( color_white )
+    frame.greeting:SetExpensiveShadow( 1, Color( 0, 0, 0, 185 ) )
+    frame.greeting:SizeToContents()
 end )
 
 bfUI.addDataCheck( "currency", function( data, frame )
@@ -324,6 +335,11 @@ bfUI.addDataCheck( "currency", function( data, frame )
             //draw.SimpleText( moneyText, "bfUIMedium-Secondary-Blurred", w / 2, h / 2, Color( 255, 255, 255, 150 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
         end
     end
+end )
+
+bfUI.addDataCheck( "options", function( data, frame )
+    local settingsPanel = frame.panel:Add( "bfUISettingsPanel" )
+    settingsPanel:setUp()
 end )
 
 function bfUI.getCallback( data, frame )
