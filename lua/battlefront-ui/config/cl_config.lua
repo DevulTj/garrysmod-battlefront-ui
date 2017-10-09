@@ -67,6 +67,12 @@ bfUI.registerElement( "HOME", {
 			sub = "LAST CHANCE",
 			image = Material( "bfui/block_4.png" )
 		}
+	},
+	currency = {
+		{
+			image = Material( "bfui/money.png" ),
+			callback = function( player ) return player.getDarkRPVar and player:getDarkRPVar( "money", 0 ) or 0 end
+		}
 	}
 })
 

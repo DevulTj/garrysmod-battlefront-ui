@@ -136,44 +136,6 @@ function FRAME:showAvatar()
     end
 end
 
-local darkRPMoney = Material( "bfui/money.png" )
-local pointshopMoney = Material( "bfui/creditcard.png" )
-function FRAME:showCurrency()
-    self.currencyLayout = self:Add( "Panel" )
-    self.currencyLayout:SetSize( 400, 32 )
-    self.currencyLayout:SetPos( self:GetWide() - self.currencyLayout:GetWide() - 52, 32 )
-
-    self.pointshopMoney = self.currencyLayout:Add( "DButton" )
-    self.pointshopMoney:Dock( RIGHT )
-    self.pointshopMoney:SetWide( 128 )
-    self.pointshopMoney:SetText( "" )
-    self.pointshopMoney.Paint = function( this, w, h )
-        surface.SetMaterial( pointshopMoney )
-        surface.SetDrawColor( color_white )
-        surface.DrawTexturedRect( 0, 8, 16, 16 )
-
-        local moneyText = "200"
-
-        draw.SimpleText( moneyText, "bfUIMedium-Secondary", w / 2, h / 2 + 1, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-        //draw.SimpleText( moneyText, "bfUIMedium-Secondary-Blurred", w / 2, h / 2, Color( 255, 255, 255, 150 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-    end
-
-    self.darkRPMoney = self.currencyLayout:Add( "DButton" )
-    self.darkRPMoney:Dock( RIGHT )
-    self.darkRPMoney:SetWide( 128 )
-    self.darkRPMoney:SetText( "" )
-    self.darkRPMoney.Paint = function( this, w, h )
-        surface.SetMaterial( darkRPMoney )
-        surface.SetDrawColor( color_white )
-        surface.DrawTexturedRect( 0, 8, 16, 16 )
-
-        local moneyText = "5,000"
-
-        draw.SimpleText( moneyText, "bfUIMedium-Secondary", w / 2, h / 2 + 1, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-        //draw.SimpleText( moneyText, "bfUIMedium-Secondary-Blurred", w / 2, h / 2, Color( 255, 255, 255, 150 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-    end
-end
-
 function FRAME:setUp()
     self:refreshBackground()
 
@@ -330,9 +292,6 @@ function FRAME:setUp()
 
     -- Render avatar layout
     self:showAvatar()
-
-    -- Render currency layout
-    self:showCurrency()
 
     -- Render WIP
     self.warning = self:Add( "DButton" )

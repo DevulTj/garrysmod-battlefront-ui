@@ -303,6 +303,29 @@ bfUI.addDataCheck( "showGreeting", function( _, frame )
 
 end )
 
+bfUI.addDataCheck( "currency", function( data, frame )
+    frame.currencyLayout = frame:Add( "Panel" )
+    frame.currencyLayout:SetSize( 400, 32 )
+    frame.currencyLayout:SetPos( frame:GetWide() - frame.currencyLayout:GetWide() - 52, 32 )
+
+    for _, currencyInfo in pairs( data.currency or {} ) do
+        local button = frame.currencyLayout:Add( "DButton" )
+        button:Dock( RIGHT )
+        button:SetWide( 128 )
+        button:SetText( "" )
+        button.Paint = function( this, w, h )
+            surface.SetMaterial( currencyInfo.image )
+            surface.SetDrawColor( color_white )
+            surface.DrawTexturedRect( 0, 8, 16, 16 )
+
+            local moneyText = currencyInfo.callback( LocalPlayer() ) or 0
+
+            draw.SimpleText( moneyText, "bfUIMedium-Secondary", w / 2, h / 2 + 1, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+            //draw.SimpleText( moneyText, "bfUIMedium-Secondary-Blurred", w / 2, h / 2, Color( 255, 255, 255, 150 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+        end
+    end
+end )
+
 function bfUI.getCallback( data, frame )
     if not data then return end
     if not IsValid( frame ) then return end
