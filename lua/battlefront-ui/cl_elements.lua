@@ -153,10 +153,10 @@ function FRAME:setUp()
     self.background:SetSize( self:GetWide() * 3, self:GetTall() )
 
     local color = bfUI.getClientData( "main_color", color_black )
-    local gradientCol = bfUI.getClientData( "gradient_color", color_black )
 
     self.background.Paint = function( pnl, w, h )
         local scrW, scrH = ScrW(), ScrH()
+        local gradientCol = bfUI.getClientData( "gradient_color", color_black )
 
         draw.RoundedBox( 0, 0, 0, w, h, color )
         draw.RoundedBox( 0, scrW, 0, w - scrW, h, gradientCol )
@@ -172,16 +172,10 @@ function FRAME:setUp()
         surface.DrawTexturedRect( scrW * 0.75, 0, scrW * 0.25, h )
     end
 
-    self.leftPanel = self:Add( "DPanel" )
+    self.leftPanel = self:Add( "Panel" )
     self.leftPanel:Dock( LEFT )
     self.leftPanel:DockMargin( 0, -24, 0, 0 )
     self.leftPanel:SetWide( 24 )
-
-    local elementsCol = bfUI.getClientData( "theme_elements_color", color_white )
-    elementsCol = Color( elementsCol.r, elementsCol.g, elementsCol.b, 75 )
-    self.leftPanel.Paint = function( pnl, w, h )
-
-    end
 
     self.buttonLayout = self:Add( "DIconLayout" )
     self.buttonLayout:Dock( TOP )
@@ -189,10 +183,6 @@ function FRAME:setUp()
     self.buttonLayout:DockPadding( 0, 0, 0, 16 )
     self.buttonLayout:SetTall( 64 )
     self.buttonLayout:SetSpaceX( 4 )
-
-    self.buttonLayout.Paint = function( pnl, w, h )
-
-    end
 
     self.footer = self:Add( "Panel" )
     self.footer:Dock( BOTTOM )

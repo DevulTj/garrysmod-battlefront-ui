@@ -126,13 +126,15 @@ function PANEL:addColor( parent, value )
     color.Paint = function( this, w, h )
         local isHovered = this:IsHovered()
 
+        draw.RoundedBox( 16, 1, 1, w - 2, h - 2, Color( 0, 0, 0, 150 ) )
+
         if isHovered then
-            draw.RoundedBox( 16, 0, 4, w, h - 8, Color( value.r, value.g, value.b, 100 ) )
+            draw.RoundedBox( 16, 6, 6, w - 12, h - 12, Color( value.r - 50, value.g - 50, value.b - 50, 255 ) )
         end
 
-        local xPos = isHovered and 3 or 0
-        local yPos = isHovered and 6 or 4
-        local bWidth, bHeight = isHovered and w - 6 or w, isHovered and h - 12 or h - 8
+        local xPos = isHovered and 5 or 4
+        local yPos = isHovered and 5 or 4
+        local bWidth, bHeight = isHovered and w - 10 or w - 8, isHovered and h - 10 or h - 8
 
         draw.RoundedBox( 16, xPos, yPos, bWidth, bHeight, Color( value.r, value.g, value.b, 255 ) )
 
@@ -153,13 +155,33 @@ function PANEL:addColor( parent, value )
     end
 end
 
+function PANEL:returnToOptionCategory()
+    self.optionPanel:AlphaTo( 0, bfUI.getClientData( "fade_time", 0.5 ), 0, function() 
+        self.optionPanel:Clear()
+
+        self:fillOptions( self.categoryId )
+    end )
+end
+
 function PANEL:editColor( varName, varInfo, value )
     local footer = self.optionPanel:Add( "Panel" )
     footer:Dock( BOTTOM )
     footer:SetTall( 40 )
 
+    local resetToDefault = footer:Add( "bfUIButton" )
+    resetToDefault:Dock( LEFT )
+    resetToDefault:SetText( "RESET TO DEFAULT" )
+    resetToDefault:SetWide( 256 )
+
+    resetToDefault.DoClick = function( this )
+        bfUI.setClientData( varName, varInfo.default )
+
+        self:returnToOptionCategory()
+    end
+
     local submit = footer:Add( "bfUIButton" )
     submit:Dock( LEFT )
+    submit:DockMargin( 8, 0, 0, 0 )
     submit:SetText( "SUBMIT" )
     submit:SetWide( 128 )
 
@@ -172,12 +194,7 @@ function PANEL:editColor( varName, varInfo, value )
 
     submit.DoClick = function( this )
         bfUI.setClientData( varName, mixer:GetColor() )
-
-        self.optionPanel:AlphaTo( 0, bfUI.getClientData( "fade_time", 0.5 ), 0, function() 
-            self.optionPanel:Clear()
-
-            self:fillOptions( self.categoryId )
-        end )
+        self:returnToOptionCategory()
     end
 end
 
