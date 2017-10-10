@@ -63,8 +63,18 @@ function PANEL:addTextEntry( parent, value )
     textEntry:SetValue( value )
     textEntry:SetFont( "bfUIMedium" )
 
+    local color = Color( 50, 50, 50, 125 ) 
     textEntry.Paint = function( this, w, h )
-        draw.RoundedBox( 16, 0, 4, w, h - 8, Color( 50, 50, 50, 125 ) )
+        local isHovered = this:IsHovered()
+
+        if isHovered then
+            draw.RoundedBox( 16, 0, 4, w, h - 8, Color( color.r, color.g, color.b, 100 ) )
+        end
+
+        local xPos = isHovered and 3 or 0
+        local yPos = isHovered and 6 or 4
+        local bWidth, bHeight = isHovered and w - 6 or w, isHovered and h - 12 or h - 8
+        draw.RoundedBox( 16, xPos, yPos, bWidth, bHeight, Color( color.r, color.g, color.b, 255 ) )
 
     	this:DrawTextEntryText( color_white, Color( 125, 0, 0, 125 ), Color( 200, 200, 200, 200 ) )
     end
@@ -110,7 +120,17 @@ function PANEL:addColor( parent, value )
     
     local value = IsColor( value ) and value or istable( value ) and Color( value.r, value.g, value.b, value.a ) or color_white
     color.Paint = function( this, w, h )
-        draw.RoundedBox( 16, 0, 4, w, h - 8, Color( value.r, value.g, value.b, 100 ) )
+        local isHovered = this:IsHovered()
+
+        if isHovered then
+            draw.RoundedBox( 16, 0, 4, w, h - 8, Color( value.r, value.g, value.b, 100 ) )
+        end
+
+        local xPos = isHovered and 3 or 0
+        local yPos = isHovered and 6 or 4
+        local bWidth, bHeight = isHovered and w - 6 or w, isHovered and h - 12 or h - 8
+        draw.RoundedBox( 16, xPos, yPos, bWidth, bHeight, Color( value.r, value.g, value.b, 255 ) )
+
 
         surface.SetMaterial( mixerMat )
         surface.SetDrawColor( Color( 0, 0, 0, 150 ) )
@@ -123,13 +143,28 @@ function PANEL:addColor( parent, value )
     color.DoClick = function( this )
         self:showEdit( parent.varName, parent.varInfo )
         self:editColor( parent.varInfo )
+
+        self.optionPanel:SetAlpha( 0 )
+        self.optionPanel:AlphaTo( 255, bfUI.getClientData( "fade_time", 0.5 ), 0 )
     end
 end
 
 function PANEL:editColor( varInfo )
+    local footer = self.optionPanel:Add( "Panel" )
+    footer:Dock( BOTTOM )
+    footer:SetTall( 40 )
+
+    local submit = footer:Add( "bfUIButton" )
+    submit:Dock( LEFT )
+    submit:SetText( "SUBMIT" )
+    submit:SetWide( 128 )
+
     local mixer = self.optionPanel:Add( "DColorMixer" )
     mixer:Dock( FILL )
-    mixer:DockMargin( 0, 0, 64, 64 )
+    mixer:DockMargin( 0, 0, 128, 16 )
+    mixer:SetPalette( false )
+
+    mixer:SetColor( varInfo.value )
 end
 
 function PANEL:showEdit( varName, varInfo )
@@ -153,7 +188,7 @@ function PANEL:fillOptions( categoryId )
 
     self.optionPanel = self.panel:Add( "Panel" )
     self.optionPanel:Dock( FILL )
-    self.optionPanel:DockMargin( 8, 0, 0, 0 )
+    self.optionPanel:DockMargin( 32, 0, 0, 0 )
 
     for varName, varInfo in pairs( bfUI.data.stored ) do
         if varInfo.data and varInfo.data.category ~= categoryId then continue end
