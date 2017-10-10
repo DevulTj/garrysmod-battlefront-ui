@@ -78,6 +78,10 @@ function PANEL:addTextEntry( parent, value )
 
     	this:DrawTextEntryText( color_white, Color( 125, 0, 0, 125 ), Color( 200, 200, 200, 200 ) )
     end
+
+    textEntry.OnChange = function( this )
+        bfUI.setClientData( parent.varName, this:GetValue() )
+    end
 end
 
 function PANEL:addBoolean( parent, value )
@@ -129,8 +133,8 @@ function PANEL:addColor( parent, value )
         local xPos = isHovered and 3 or 0
         local yPos = isHovered and 6 or 4
         local bWidth, bHeight = isHovered and w - 6 or w, isHovered and h - 12 or h - 8
-        draw.RoundedBox( 16, xPos, yPos, bWidth, bHeight, Color( value.r, value.g, value.b, 255 ) )
 
+        draw.RoundedBox( 16, xPos, yPos, bWidth, bHeight, Color( value.r, value.g, value.b, 255 ) )
 
         surface.SetMaterial( mixerMat )
         surface.SetDrawColor( Color( 0, 0, 0, 150 ) )
@@ -142,14 +146,14 @@ function PANEL:addColor( parent, value )
 
     color.DoClick = function( this )
         self:showEdit( parent.varName, parent.varInfo )
-        self:editColor( parent.varInfo )
+        self:editColor( parent.varName, parent.varInfo, value )
 
         self.optionPanel:SetAlpha( 0 )
         self.optionPanel:AlphaTo( 255, bfUI.getClientData( "fade_time", 0.5 ), 0 )
     end
 end
 
-function PANEL:editColor( varInfo )
+function PANEL:editColor( varName, varInfo, value )
     local footer = self.optionPanel:Add( "Panel" )
     footer:Dock( BOTTOM )
     footer:SetTall( 40 )
@@ -164,7 +168,17 @@ function PANEL:editColor( varInfo )
     mixer:DockMargin( 0, 0, 128, 16 )
     mixer:SetPalette( false )
 
-    mixer:SetColor( varInfo.value )
+    mixer:SetColor( value )
+
+    submit.DoClick = function( this )
+        bfUI.setClientData( varName, mixer:GetColor() )
+
+        self.optionPanel:AlphaTo( 0, bfUI.getClientData( "fade_time", 0.5 ), 0, function() 
+            self.optionPanel:Clear()
+
+            self:fillOptions( self.categoryId )
+        end )
+    end
 end
 
 function PANEL:showEdit( varName, varInfo )
@@ -182,6 +196,14 @@ end
 function PANEL:fillOptions( categoryId )
     self.elements = {}
 
+    if IsValid( self.optionList ) then
+        self.optionList:Remove()
+    end
+
+    if IsValid( self.optionPanel ) then
+        self.optionPanel:Remove()
+    end
+
     self.optionList = self.panel:Add( "DIconLayout" )
     self.optionList:Dock( LEFT )
     self.optionList:SetWide( self:GetWide() / 2 )
@@ -193,13 +215,12 @@ function PANEL:fillOptions( categoryId )
     for varName, varInfo in pairs( bfUI.data.stored ) do
         if varInfo.data and varInfo.data.category ~= categoryId then continue end
 
-        local button = self.optionList:Add( "DButton" )
-        button:SetText( "" )
+        local button = self.optionList:Add( "EditablePanel" )
         button:Dock( TOP )
         button:SetTall( 40 )
 
         button.Paint = function( this, w, h )
-            local color = this:IsDown() and Color( 255, 160, 0 ) or this:IsHovered() and Color( 255, 200, 0 ) or Color( 235, 235, 235 )
+            local color = this:IsHovered() and Color( 255, 200, 0 ) or Color( 235, 235, 235 )
             local colorAlpha = 255
 
             color = Color( color.r, color.g, color.b, colorAlpha )
@@ -211,14 +232,15 @@ function PANEL:fillOptions( categoryId )
         button.varName = varName
         button.varInfo = varInfo
 
-        local _type = type( varInfo.value )
+        local value = bfUI.getClientData( varName, varInfo.default )
+        local _type = type( value )
 
         if _type == "number" or _type == "string" then
-            self:addTextEntry( button, varInfo.value )
+            self:addTextEntry( button, value )
         elseif _type == "boolean" then
-            self:addBoolean( button, varInfo.value )
-        elseif _type == "table" and varInfo.value.r and varInfo.value.g and varInfo.value.b then
-            self:addColor( button, varInfo.value )
+            self:addBoolean( button, value )
+        elseif _type == "table" and value.r and value.g and value.b then
+            self:addColor( button, value )
         end
         
         self.elements[ varName ] = button
@@ -226,6 +248,8 @@ function PANEL:fillOptions( categoryId )
 end
 
 function PANEL:viewOptions( categoryId )
+    self.categoryId = categoryId
+
     local fadeTime = bfUI.getClientData( "fade_time", 0.5 )
     self.panel:AlphaTo( 0, fadeTime, 0, function()
         self.panel:Clear()
