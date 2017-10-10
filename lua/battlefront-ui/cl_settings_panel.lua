@@ -59,8 +59,9 @@ end
 function PANEL:addTextEntry( parent, value )
     local textEntry = parent:Add( "DTextEntry" )
     textEntry:Dock( RIGHT )
-    textEntry:SetWide( 128 )
+    textEntry:SetWide( 256 )
     textEntry:SetValue( value )
+    textEntry:SetFont( "bfUIMedium" )
 
     textEntry.Paint = function( this, w, h )
         draw.RoundedBox( 16, 0, 4, w, h - 8, Color( 50, 50, 50, 125 ) )
@@ -100,8 +101,47 @@ function PANEL:addBoolean( parent, value )
     end
 end
 
+local mixerMat = Material( "bfui/paint-board-and-brush.png" )
 function PANEL:addColor( parent, value )
+    local color = parent:Add( "DButton" )
+    color:SetText( "" )
+    color:Dock( RIGHT )
+    color:SetWide( 256 )
+    
+    local value = IsColor( value ) and value or istable( value ) and Color( value.r, value.g, value.b, value.a ) or color_white
+    color.Paint = function( this, w, h )
+        draw.RoundedBox( 16, 0, 4, w, h - 8, Color( value.r, value.g, value.b, 100 ) )
 
+        surface.SetMaterial( mixerMat )
+        surface.SetDrawColor( Color( 0, 0, 0, 150 ) )
+        surface.DrawTexturedRect( 8 + 2, 4 + 2, 32, 32 )
+
+        surface.SetDrawColor( color_white )
+        surface.DrawTexturedRect( 8, 4, 32, 32 )
+    end
+
+    color.DoClick = function( this )
+        self:showEdit( parent.varName, parent.varInfo )
+        self:editColor( parent.varInfo )
+    end
+end
+
+function PANEL:editColor( varInfo )
+    local mixer = self.optionPanel:Add( "DColorMixer" )
+    mixer:Dock( FILL )
+    mixer:DockMargin( 0, 0, 64, 64 )
+end
+
+function PANEL:showEdit( varName, varInfo )
+    self.optionPanel:Clear()
+
+    local title = self.optionPanel:Add( "DLabel" )
+    title:Dock( TOP )
+    title:SetText( varName:upper() )
+    title:SetFont( "bfUIHuge-Secondary" )
+    title:SetTextColor( color_white )
+    title:SetExpensiveShadow( 1, Color( 0, 0, 0, 150 ) )
+    title:SizeToContents()
 end
 
 function PANEL:fillOptions( categoryId )
@@ -110,6 +150,10 @@ function PANEL:fillOptions( categoryId )
     self.optionList = self.panel:Add( "DIconLayout" )
     self.optionList:Dock( LEFT )
     self.optionList:SetWide( self:GetWide() / 2 )
+
+    self.optionPanel = self.panel:Add( "Panel" )
+    self.optionPanel:Dock( FILL )
+    self.optionPanel:DockMargin( 8, 0, 0, 0 )
 
     for varName, varInfo in pairs( bfUI.data.stored ) do
         if varInfo.data and varInfo.data.category ~= categoryId then continue end
@@ -138,8 +182,8 @@ function PANEL:fillOptions( categoryId )
             self:addTextEntry( button, varInfo.value )
         elseif _type == "boolean" then
             self:addBoolean( button, varInfo.value )
-        elseif _type == "table" then
-
+        elseif _type == "table" and varInfo.value.r and varInfo.value.g and varInfo.value.b then
+            self:addColor( button, varInfo.value )
         end
         
         self.elements[ varName ] = button
