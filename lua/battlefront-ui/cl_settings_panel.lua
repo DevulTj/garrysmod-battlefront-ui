@@ -328,4 +328,4 @@ function PANEL:setUp()
     end
 end
 
-derma.DefineControl( "bfUISettingsPanel", nil, PANEL, "DPanel" )
+derma.DefineControl( "bfUISettingsPanel", nil, PANEL, "EditablePanel" )

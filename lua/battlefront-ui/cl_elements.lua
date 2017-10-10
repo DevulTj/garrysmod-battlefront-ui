@@ -35,7 +35,6 @@ function FRAME:Init()
     self:MakePopup()
 
     self:setUp()
-    self:SetKeyboardInputEnabled( false )
 end
 
 function FRAME:canFade()
@@ -69,6 +68,12 @@ function FRAME:fadeOut()
             self:Close()
         end )
     end )
+end
+
+function FRAME:Think()
+    if input.IsKeyDown( bfUI.getClientData( "menu_key", KEY_F6 ) ) then 
+        self:fadeOut()
+    end
 end
 
 function FRAME:refreshBackground()

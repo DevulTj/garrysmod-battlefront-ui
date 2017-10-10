@@ -54,9 +54,14 @@ function bfUI.getClientData( var, fallbackVal )
 end
 
 function bfUI.setClientData( var, val )
+    local oldVal = bfUI.data.playerData[ var ]
     bfUI.data.playerData[ var ] = val
 
     saveData()
+
+    if bfUI.data.stored[ var ] and bfUI.data.stored[ var ].callback then
+        bfUI.data.stored[ var ].callback( oldVal, val )
+    end
 end
 
 bfUI.data.playerData = getAllData()
