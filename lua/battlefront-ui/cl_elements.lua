@@ -79,7 +79,7 @@ end
 function FRAME:refreshBackground()
     if bfUI.getUnEditableData( "background_material_disabled", false ) then return end
 
-    local backgroundMaterial = bfUI.getClientData( "background_material", "bfui/bfui_background.jpg" )
+    local backgroundMaterial = bfUI.getUnEditableData( "background_material", "bfui/bfui_background.jpg" )
 
     if istable( backgroundMaterial ) then
         backgroundMaterial = table.Random( backgroundMaterial )
@@ -152,13 +152,11 @@ function FRAME:setUp()
     self.background = self:Add( "DPanel" )
     self.background:SetSize( self:GetWide() * 3, self:GetTall() )
 
-    local color = bfUI.getClientData( "main_color", color_black )
-
     self.background.Paint = function( pnl, w, h )
         local scrW, scrH = ScrW(), ScrH()
         local gradientCol = bfUI.getClientData( "gradient_color", color_black )
 
-        draw.RoundedBox( 0, 0, 0, w, h, color )
+        draw.RoundedBox( 0, 0, 0, w, h, bfUI.getClientData( "main_color", color_black ) )
         draw.RoundedBox( 0, scrW, 0, w - scrW, h, gradientCol )
 
         if self.backgroundMaterial then
@@ -286,7 +284,22 @@ function FRAME:setUp()
     self.quit:SetText( "QUIT" )
 
     self.quit.DoClick = function( this )
-        self:fadeOut()
+        if bfUI.getClientData( "ask_on_close", false ) then
+            bfUI.createDialogue(
+                "QUIT",
+                "Do you want to quit this menu?" ,
+                "Yes",
+                function( dialogue )
+                    self:fadeOut()
+                    dialogue:Close()
+                end,
+                "No",
+                function( dialogue )
+                    dialogue:Close()
+                end )
+        else
+            self:fadeOut()
+        end
     end
 
     -- Render avatar layout

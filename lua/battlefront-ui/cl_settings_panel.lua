@@ -20,10 +20,12 @@ function PANEL:createCategoryButton( parent, categoryId, categoryInfo )
 
         color = Color( color.r, color.g, color.b, colorAlpha )
 
-        -- Icon image
-        surface.SetMaterial( categoryInfo.image )
-        surface.SetDrawColor( color )
-        surface.DrawTexturedRect( w / 2 - ( 150 / 2 ), h / 1.75 - ( 150 / 2 ), 150, 150 )
+        if categoryInfo.image then
+            -- Icon image
+            surface.SetMaterial( categoryInfo.image )
+            surface.SetDrawColor( color )
+            surface.DrawTexturedRect( w / 2 - ( 150 / 2 ), h / 1.75 - ( 150 / 2 ), 150, 150 )
+        end
 
         surface.SetMaterial( topRight )
         surface.SetDrawColor( color )
@@ -88,7 +90,7 @@ function PANEL:addBoolean( parent, value )
     local button = parent:Add( "DButton" )
     button:SetText( "" )
     button:Dock( RIGHT )
-    button:SetWide( 186 )
+    button:SetWide( 256 )
 
     button.Paint = function( this, w, h )
         local activeColor = Color( 255, 255, 255, 255 )
@@ -98,12 +100,12 @@ function PANEL:addBoolean( parent, value )
         local desiredBoxColorInverted = not value and Color( activeColor.r, activeColor.g, activeColor.b, 200 ) or Color( notActiveColor.r, notActiveColor.g, notActiveColor.b, 100 )
 
         -- Yes
-        draw.RoundedBox( 4, 8, 4, 64, h - 8, desiredBoxColor )
-        draw.SimpleText( "YES", "bfUIMedium-Secondary", 32 + 8, h / 2, not value and activeColor or notActiveColor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+        draw.RoundedBox( 16, 4, 4, w / 2 - 8, h - 8, desiredBoxColor )
+        draw.SimpleText( "YES", "bfUIMedium-Secondary", ( w / 2 ) / 2, h / 2, not value and activeColor or notActiveColor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
         
         -- No
-        draw.RoundedBox( 4, 64 + 16, 4, 64, h - 8, desiredBoxColorInverted )
-        draw.SimpleText( "NO", "bfUIMedium-Secondary", 32 + 8 + 64 + 8, h / 2, value and activeColor or notActiveColor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+        draw.RoundedBox( 16, w / 2, 4, w / 2 - 8, h - 8, desiredBoxColorInverted )
+        draw.SimpleText( "NO", "bfUIMedium-Secondary", w - ( ( w / 2 ) / 2 ) - 8 , h / 2, value and activeColor or notActiveColor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
     end
 
     button.DoClick = function( this )
@@ -154,6 +156,14 @@ function PANEL:addColor( parent, value )
         self.optionPanel:AlphaTo( 255, bfUI.getClientData( "fade_time", 0.5 ), 0 )
     end
 end
+
+function PANEL:addTable( parent, value )
+    local combo = self.optionPanel:Add( "DComboBox" )
+    combo:Dock( RIGHT )
+    combo:SetWide( 256 )
+    combo:SetText( "" )
+end
+
 
 function PANEL:returnToOptionCategory()
     self.optionPanel:AlphaTo( 0, bfUI.getClientData( "fade_time", 0.5 ), 0, function() 

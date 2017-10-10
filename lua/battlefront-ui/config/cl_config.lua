@@ -19,12 +19,12 @@ bfUI.registerCategory( "appearance", "APPEARANCE", Material( "bfui/avatar.png", 
 
 bfUI.registerUneditableConfig( "menu_key", KEY_F6 ) -- Available keys: KEY enumeration (https://wiki.garrysmod.com/page/Enums/KEY)
 bfUI.registerUneditableConfig( "background_material_disabled", false ) -- Disables material background image and uses main_color client configuration
-bfUI.registerClientConfig( "background_material", { "bfui/bfui_background.jpg" }, "The background of Battlefront UI", nil, { category = "appearance" } ) -- Material background path, make sure you FastDL/Workshop it
+bfUI.registerUneditableConfig( "background_material", "bfui/bfui_background.jpg" ) -- Material background path, make sure you FastDL/Workshop it
 bfUI.registerUneditableConfig( "element_title_force_uppercase", true ) -- Forces element button titles to be in UPPERCASE or not
 bfUI.registerUneditableConfig( "can_edit_clientside_settings", true ) -- Enforces the ability to set clientside customization
-bfUI.registerUneditableConfig( "show_avatar", true ) -- Show avatar button
+bfUI.registerClientConfig( "show_avatar", true, "Whether avatar should be displayed", nil, { category = "appearance" } ) -- Show avatar button
 
-bfUI.registerClientConfig( "main_color", Color( 26, 28, 89 ), "The theme's main colour", nil, { category = "appearance" } )
+bfUI.registerClientConfig( "main_color", Color( 230, 230, 230 ), "The theme's main colour", nil, { category = "appearance" } )
 bfUI.registerClientConfig( "gradient_color", Color( 25, 25, 25 ), "The theme's gradient main colour", nil, { category = "appearance" } )
 bfUI.registerClientConfig( "fade_time", 0.5, "Fade time for animations within the theme", nil, { category = "appearance" } )
 bfUI.registerClientConfig( "element_pressed_fade_time", 0.5, "Fade time for when you press an element button", nil, { category = "appearance" } )
@@ -48,7 +48,7 @@ bfUI.registerClientConfig( "button_bg_color", Color( 255, 255, 255 ), "Button ba
 
 bfUI.registerClientConfig( "ask_on_close", true, "Whether to ask to close the frame when you press the close button", nil, { category = "general configuration" } )
 
-bfUI.registerClientConfig( "auto_open_on_join", true, "Whether Central Menu should auto-open on join", nil, { category = "general configuration" } )
+bfUI.registerClientConfig( "auto_open_on_join", true, "Whether Battlefront UI should auto-open on join", nil, { category = "general configuration" } )
 
 bfUI.registerElement( "HOME", {
 	greeting = "WELCOME TO BATTLEFRONT UI, YOU CAN SPECIFY YOUR TEXT HERE.",

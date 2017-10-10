@@ -50,7 +50,8 @@ function bfUI.getUnEditableData( var, fallbackVal )
 end
 
 function bfUI.getClientData( var, fallbackVal )
-    return bfUI.data.playerData[ var ] or fallbackVal
+    local curVal = bfUI.data.playerData[ var ]
+    return curVal or curVal == false and curVal or fallbackVal
 end
 
 function bfUI.setClientData( var, val )
