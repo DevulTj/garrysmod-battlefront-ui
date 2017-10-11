@@ -213,7 +213,7 @@ function PANEL:showEdit( varName, varInfo )
 
     local title = self.optionPanel:Add( "DLabel" )
     title:Dock( TOP )
-    title:SetText( varName:upper() )
+    title:SetText( varInfo and varInfo.data and varInfo.data.niceName and varInfo.data.niceName:upper() or varName:upper() )
     title:SetFont( "bfUIHuge-Secondary" )
     title:SetTextColor( color_white )
     title:SetExpensiveShadow( 1, Color( 0, 0, 0, 150 ) )
@@ -252,8 +252,9 @@ function PANEL:fillOptions( categoryId )
 
             color = Color( color.r, color.g, color.b, colorAlpha )
 
-            draw.SimpleText( varName, "bfUIMediumLarge-Secondary-Blurred", 28, h / 2, Color( color.r, color.g, color.b, 150 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
-            draw.SimpleText( varName, "bfUIMediumLarge-Secondary", 28, h / 2, color, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER ) 
+            local name = varInfo and varInfo.data and varInfo.data.niceName and varInfo.data.niceName or varName
+            draw.SimpleText( name, "bfUIMediumLarge-Secondary-Blurred", 28, h / 2, Color( color.r, color.g, color.b, 150 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+            draw.SimpleText( name, "bfUIMediumLarge-Secondary", 28, h / 2, color, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER ) 
         end
 
         button.varName = varName

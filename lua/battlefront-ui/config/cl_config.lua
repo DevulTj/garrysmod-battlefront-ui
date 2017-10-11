@@ -22,20 +22,20 @@ bfUI.registerUneditableConfig( "background_material_disabled", false ) -- Disabl
 bfUI.registerUneditableConfig( "background_material", "bfui/bfui_background.jpg" ) -- Material background path, make sure you FastDL/Workshop it
 bfUI.registerUneditableConfig( "element_title_force_uppercase", true ) -- Forces element button titles to be in UPPERCASE or not
 bfUI.registerUneditableConfig( "can_edit_clientside_settings", true ) -- Enforces the ability to set clientside customization
-bfUI.registerClientConfig( "show_avatar", true, "Whether avatar should be displayed", nil, { category = "appearance" } ) -- Show avatar button
+bfUI.registerClientConfig( "show_avatar", true, "Whether avatar should be displayed", nil, { category = "appearance", niceName = "Display avatars" } ) -- Show avatar button
 
-bfUI.registerClientConfig( "main_color", Color( 230, 230, 230 ), "The theme's main colour", nil, { category = "appearance" } )
-bfUI.registerClientConfig( "gradient_color", Color( 25, 25, 25 ), "The theme's gradient main colour", nil, { category = "appearance" } )
-bfUI.registerClientConfig( "fade_time", 0.5, "Fade time for animations within the theme", nil, { category = "appearance" } )
-bfUI.registerClientConfig( "element_pressed_fade_time", 0.5, "Fade time for when you press an element button", nil, { category = "appearance" } )
+bfUI.registerClientConfig( "main_color", Color( 230, 230, 230 ), "The theme's main colour", nil, { category = "appearance", niceName = "Theme primary color" } )
+bfUI.registerClientConfig( "gradient_color", Color( 25, 25, 25 ), "The theme's gradient main colour", nil, { category = "appearance", niceName = "Theme gradient color" } )
+bfUI.registerClientConfig( "fade_time", 0.5, "Fade time for animations within the theme", nil, { category = "appearance", niceName = "Fade time (general)" } )
+bfUI.registerClientConfig( "element_pressed_fade_time", 0.5, "Fade time for when you press an element button", nil, { category = "appearance", niceName = "Fade time (section click)" } )
 
 bfUI.registerClientConfig( "font", "Futura ICG", "The theme's font", function( _, newFont )
 	hook.Call( "loadFonts" )
-end, { category = "appearance" } )
+end, { category = "appearance", niceName = "Primary font" } )
 
 bfUI.registerClientConfig( "font_secondary", "Roboto Condensed", "The theme's secondary font", function( _, newFont )
 	hook.Call( "loadFonts" )
-end, { category = "appearance" } )
+end, { category = "appearance", niceName = "Secondary font" } )
 
 bfUI.registerClientConfig( "element_button_color", Color( 255, 255, 255 ), "Button colour within the theme", nil, { category = "element button appearance" } )
 bfUI.registerClientConfig( "element_button_disabled_color", Color( 125, 125, 125 ), "Disabled button colour within the theme", nil, { category = "element button appearance" } )
