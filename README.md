@@ -25,10 +25,10 @@ Battlefront UI is an authentic, asethetically pleasing, and a very accurate repr
 
 **Note:** If something breaks, this is your liability and I am not responsible for any inconveniences caused. Replace your configuration if you break something.
 
-## Bugs & suggestions:	
+# Bugs & suggestions
 Whether you have a suggestion, request or a bug report, please do not refrain from opening a support ticket on ScriptFodder or contacting [DevulTj](https://steamcommunity.com/id/devul) on Steam.
 
-## Credits:	
+# Credits
 - [DevulTj](https://steamcommunity.com/id/devul)
 
 ## Other scripts you'll love
