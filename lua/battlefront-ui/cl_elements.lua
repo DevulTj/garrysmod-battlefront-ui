@@ -501,10 +501,10 @@ function BUTTON:setUp()
         draw.RoundedBox( 0, 0, pnl.boxY, w, h, bfUI.getClientData( "button_bg_color", color_white ) )
         draw.RoundedBox( 0, 0, h - 32, w, 1, Color( 150, 150, 150, 255 ) )
 
-        draw.SimpleText( self.joinText or "JOIN", "bfUIMedium", w / 2, h - 4, Color( pnl.textCol, pnl.textCol, pnl.textCol, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_BOTTOM )
-        draw.SimpleText( self.textText or "SERVER NAME", "bfUIMedium", 12, 10, Color( pnl.textCol, pnl.textCol, pnl.textCol, 255 ) )
+        draw.SimpleText( self.joinText or "JOIN", "bfUIMedium-Secondary", w / 2, h - 4, Color( pnl.textCol, pnl.textCol, pnl.textCol, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_BOTTOM )
+        draw.SimpleText( self.textText or "SERVER NAME", "bfUIMedium-Secondary", 12, 10, Color( pnl.textCol, pnl.textCol, pnl.textCol, 255 ) )
 
-        draw.SimpleText( self.descText or "A garry's mod server.", "bfUISmall", 12, 36, Color( pnl.textCol, pnl.textCol, pnl.textCol, 255 ) )
+        draw.SimpleText( self.descText or "A garry's mod server.", "bfUIMedium-Secondary", 12, 36, Color( pnl.textCol, pnl.textCol, pnl.textCol, 255 ) )
     end
 
     local icon = self:getServerIcon()
