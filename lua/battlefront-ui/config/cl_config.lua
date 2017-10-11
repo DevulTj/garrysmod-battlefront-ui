@@ -128,6 +128,5 @@ bfUI.registerElement( "RULES", {
 })
 
 bfUI.registerElement( "OPTIONS", {
-	greeting = "ALL OPTIONS WITHIN BATTLEFRONT UI. THEY ARE FULLY CUSTOMIZABLE IN-GAME.",
-	options = true,
+	options = true
 } )
