@@ -1,6 +1,6 @@
 # Battlefront UI - interface for garry's mod
 
-### Created by http://steamcommunity.com/id/Devul/
+### Created by [DevulTj](https://steamcommunity.com/id/devul)
 ###### There is currently no promotional material at this time.
 
 Battlefront UI is an authentic, asethetically pleasing, and a very accurate representation of the new Battlefront 2 UI. You can customize this interface to your greatest needs and desires. It has in-depth customization with a client based settings panel and server-based configurations. It also features a fantastic UI with great animations and graphical fidelity.
@@ -26,7 +26,7 @@ Battlefront UI is an authentic, asethetically pleasing, and a very accurate repr
 **Note:** If something breaks, this is your liability and I am not responsible for any inconveniences caused. Replace your configuration if you break something.
 
 ## Bugs & suggestions:	
-Whether you have a suggestion, request or a bug report, please do not refrain from opening a support ticket on ScriptFodder or contacting [Devul](https://steamcommunity.com/id/devul) on Steam.
+Whether you have a suggestion, request or a bug report, please do not refrain from opening a support ticket on ScriptFodder or contacting [DevulTj](https://steamcommunity.com/id/devul) on Steam.
 
 ## Credits:	
 - [DevulTj](https://steamcommunity.com/id/devul)
