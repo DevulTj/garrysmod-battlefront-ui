@@ -52,7 +52,7 @@ function PANEL:createCategoryButton( parent, categoryId, categoryInfo )
     end
 
     button.DoClick = function( this )
-        self:viewOptions( categoryId )
+        self:viewOptions( categoryId, categoryInfo )
     end
 
     return button
@@ -275,12 +275,30 @@ function PANEL:fillOptions( categoryId )
     end
 end
 
-function PANEL:viewOptions( categoryId )
+function PANEL:viewOptions( categoryId, categoryInfo )
     self.categoryId = categoryId
+    self.categoryInfo = categoryInfo
 
     local fadeTime = bfUI.getClientData( "fade_time", 0.5 )
     self.panel:AlphaTo( 0, fadeTime, 0, function()
         self.panel:Clear()
+
+        self.header = self.panel:Add( "Panel" )
+        self.header:Dock( TOP )
+        self.header:DockMargin( 0, 0, 0, 8 )
+        self.header:SetTall( 40 )
+
+        self.header.Paint = function( this, w, h )
+            if categoryInfo.image then
+                -- Icon image
+                surface.SetMaterial( categoryInfo.image )
+                surface.SetDrawColor( color_white )
+                surface.DrawTexturedRect( 0, 0, 40, 40 )
+            end
+
+            draw.SimpleText( categoryInfo.name, "bfUIMediumLarge-Secondary-Blurred", 48, h / 2, Color( 255, 255, 255, 150 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+            draw.SimpleText( categoryInfo.name, "bfUIMediumLarge-Secondary", 48, h / 2, color_white, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+        end
 
         self.footer = self.panel:Add( "Panel" )
         self.footer:Dock( BOTTOM )

@@ -46,9 +46,9 @@ bfUI.registerClientConfig( "button_text_color", Color( 255, 255, 255 ), "Text co
 bfUI.registerClientConfig( "button_text_color_inverted", Color( 0, 0, 0 ), "Inverted text color within the theme", nil, { category = "button appearance" } )
 bfUI.registerClientConfig( "button_bg_color", Color( 255, 255, 255 ), "Button background color within the theme", nil, { category = "button appearance" } )
 
-bfUI.registerClientConfig( "ask_on_close", true, "Whether to ask to close the frame when you press the close button", nil, { category = "general configuration" } )
+bfUI.registerClientConfig( "ask_on_close", true, "Whether to ask to close the frame when you press the close button", nil, { category = "general configuration", niceName = "Show prompt on quit" } )
 
-bfUI.registerClientConfig( "auto_open_on_join", true, "Whether Battlefront UI should auto-open on join", nil, { category = "general configuration" } )
+bfUI.registerClientConfig( "auto_open_on_join", true, "Whether Battlefront UI should auto-open on join", nil, { category = "general configuration", niceName = "Open on initial connection" } )
 
 bfUI.registerElement( "HOME", {
 	greeting = "WELCOME TO BATTLEFRONT UI, YOU CAN SPECIFY YOUR TEXT HERE.",
