@@ -25,7 +25,13 @@ local function getAllData()
     return util.JSONToTable( file.Read( bfUI.data.folderName .. "/" .. bfUI.data.fileName, "DATA" ) or "[]" ) or {}
 end
 
-function bfUI.registerClientConfig( var, val, description, callback, data )
+function bfUI.registerClientConfig( tbl )
+    local var = tbl.id or tbl.val
+    local val = tbl.value or tbl.val
+    local description = tbl.desc or tbl.description
+    local callback = tbl.callback or tbl.func
+    local data = tbl.data or tbl.extraData
+
     local oldCfg = bfUI.data.stored[ var ]
 
     bfUI.data.stored[ var ] = {
@@ -37,11 +43,21 @@ function bfUI.registerClientConfig( var, val, description, callback, data )
     }
 end
 
-function bfUI.registerCategory( id, name, image )
+function bfUI.registerCategory( tbl )
+    local id = tbl.id
+    local name = tbl.name
+    local image = tbl.image or tbl.material 
+
+    print( id, name, image )
+
     bfUI.data.categories[ id ] = { id = id, name = name, image = image }
 end
 
-function bfUI.registerUneditableConfig( var, val )
+function bfUI.registerUneditableConfig( tbl )
+    local var = tbl.id or tbl.val
+    local val = tbl.value or tbl.val
+    if not var or not val then return end
+
     bfUI.data.unEditableConfig[ var ] = val
 end
 

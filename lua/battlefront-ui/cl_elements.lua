@@ -144,11 +144,6 @@ end
 function FRAME:setUp()
     self:refreshBackground()
 
-    local buttonDisabledColor = bfUI.getClientData( "element_button_disabled_color", Color( 125, 125, 125 ) )
-    local buttonDownColor = bfUI.getClientData( "element_button_down_color", Color( 235, 235, 235 ) )
-    local buttonHoverColor = bfUI.getClientData( "element_button_hover_color", Color( 215, 215, 215 ) )
-    local buttonColor = bfUI.getClientData( "element_button_color", color_white )
-
     self.background = self:Add( "DPanel" )
     self.background:SetSize( self:GetWide() * 3, self:GetTall() )
 
@@ -324,7 +319,7 @@ function BUTTON:Init()
 end
 
 function BUTTON:Paint( w, h )
-    local buttonColor = bfUI.getClientData( "button_bg_color", color_white )
+    local buttonColor = color_white
 
     local isHovered = self:IsHovered()
     local xOverride, yOverride, wOverride, hOverride = self.xOverride or 0, self.yOverride or 0, self.wOverride or w, self.hOverride or h
@@ -333,7 +328,7 @@ function BUTTON:Paint( w, h )
     surface.SetDrawColor( Color( buttonColor.r, buttonColor.g, buttonColor.b, 255 ) )
     surface.DrawOutlinedRect( xOverride, yOverride, wOverride, hOverride )
 
-    self:SetTextColor( isHovered and bfUI.getClientData( "button_text_color_inverted", color_black ) or bfUI.getClientData( "button_text_color", color_white ) )
+    self:SetTextColor( isHovered and color_black or color_white )
 end
 
 function BUTTON:PaintOver()
@@ -498,7 +493,7 @@ function BUTTON:setUp()
         pnl.boxY = math.Clamp( hovered and ( pnl.boxY - 4 ) or ( pnl.boxY + 3 ), 0, self.bottomPanel:GetTall() )
         pnl.textCol = math.Clamp( hovered and ( pnl.textCol - 10 ) or ( pnl.textCol + 10 ), 0, 255 )
 
-        draw.RoundedBox( 0, 0, pnl.boxY, w, h, bfUI.getClientData( "button_bg_color", color_white ) )
+        draw.RoundedBox( 0, 0, pnl.boxY, w, h,  color_white )
         draw.RoundedBox( 0, 0, h - 32, w, 1, Color( 150, 150, 150, 255 ) )
 
         draw.SimpleText( self.joinText or "JOIN", "bfUIMedium-Secondary", w / 2, h - 4, Color( pnl.textCol, pnl.textCol, pnl.textCol, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_BOTTOM )

@@ -1,55 +1,237 @@
 --[[
-Battlefront UI
-Created by http://steamcommunity.com/id/Devul/
-Do not redistribute this software without permission from authors
+	Battlefront UI
+	Created by http://steamcommunity.com/id/Devul/
+	Do not redistribute this software without permission from authors
 
-Developer information: {{ user_id }} : {{ script_id }} : {{ script_version_id }}
-]]--
+	Developer information: {{ user_id }} : {{ script_id }} : {{ script_version_id }}
 
---[[
-	If you bind the menu_key to F1, make sure you've disabled the default DarkRP f1 help menu:
-
-	1. open `darkrpmodification/lua/darkrp_config/disabled_defaults.lua`
-	2. find the `DarkRP.disabledDefaults["modules"]` table
-	3. disable the f1menu module by setting the config to `true`
+	> If you bind the menu_key to F1, make sure you've disabled the default DarkRP f1 help menu:
+		1. open `darkrpmodification/lua/darkrp_config/disabled_defaults.lua`
+		2. find the `DarkRP.disabledDefaults["modules"]` table
+		3. disable the f1menu module by setting the config to `true`
 ]]
 
-bfUI.registerCategory( "general configuration", "GENERAL", Material( "bfui/cogwheel.png", "mips smooth" ) )
-bfUI.registerCategory( "appearance", "APPEARANCE", Material( "bfui/avatar.png", "mips smooth" )  )
+-- Category registration, for the OPTIONS menu. You can change the icons if you wish, or the names for your own language. Do not edit the id.
+bfUI.registerCategory( 
+	{
+		id = "general configuration",
+		name = "GENERAL",
+		image = Material( "bfui/cogwheel.png", "mips smooth" )
+	}
+)
 
-bfUI.registerUneditableConfig( "menu_key", KEY_F6 ) -- Available keys: KEY enumeration (https://wiki.garrysmod.com/page/Enums/KEY)
-bfUI.registerUneditableConfig( "background_material_disabled", false ) -- Disables material background image and uses main_color client configuration
-bfUI.registerUneditableConfig( "background_material", "bfui/bfui_background.jpg" ) -- Material background path, make sure you FastDL/Workshop it
-bfUI.registerUneditableConfig( "element_title_force_uppercase", true ) -- Forces element button titles to be in UPPERCASE or not
-bfUI.registerUneditableConfig( "can_edit_clientside_settings", true ) -- Enforces the ability to set clientside customization
-bfUI.registerClientConfig( "show_avatar", true, "Whether avatar should be displayed", nil, { category = "appearance", niceName = "Display avatars" } ) -- Show avatar button
+bfUI.registerCategory( 
+	{ 
+		id = "appearance", 
+		name = "APPEARANCE",
+		image = Material( "bfui/avatar.png", "mips smooth" )
+	}
+)
 
-bfUI.registerClientConfig( "main_color", Color( 230, 230, 230 ), "The theme's primary colour", nil, { category = "appearance", niceName = "Theme primary color" } )
-bfUI.registerClientConfig( "secondary_color", Color( 255, 200, 0 ), "The theme's secondary colour", nil, { category = "appearance", niceName = "Theme secondary color" } )
-bfUI.registerClientConfig( "gradient_color", Color( 25, 25, 25 ), "The theme's gradient main colour", nil, { category = "appearance", niceName = "Theme gradient color" } )
-bfUI.registerClientConfig( "fade_time", 0.5, "Fade time for animations within the theme", nil, { category = "appearance", niceName = "Fade time (general)" } )
-bfUI.registerClientConfig( "element_pressed_fade_time", 0.5, "Fade time for when you press an element button", nil, { category = "appearance", niceName = "Fade time (section click)" } )
+-- Defines the key to use to open Battlefront UI
+bfUI.registerUneditableConfig(
+	{
+		id = "menu_key",
+		value = KEY_F6  --  Use a key from the KEY enumeration (https://wiki.garrysmod.com/page/Enums/KEY)
+	}
+)
 
-bfUI.registerClientConfig( "font", "Futura ICG", "The theme's font", function( _, newFont )
-	hook.Call( "loadFonts" )
-end, { category = "appearance", niceName = "Primary font" } )
+ -- Disables material background image and uses main_color client configuration
+bfUI.registerUneditableConfig( 
+	{
+		id = "background_material_disabled",
+		value = false
+	}
+)
 
-bfUI.registerClientConfig( "font_secondary", "Roboto Condensed", "The theme's secondary font", function( _, newFont )
-	hook.Call( "loadFonts" )
-end, { category = "appearance", niceName = "Secondary font" } )
+-- Material background path, make sure you FastDL/Workshop it. The default one doesn't require it as I provided content already. :)
+bfUI.registerUneditableConfig( 
+	{
+		id = "background_material", 
+		value = "bfui/bfui_background.jpg"
+	} 
+)
 
-bfUI.registerClientConfig( "element_button_color", Color( 255, 255, 255 ), "Button colour within the theme", nil, { category = "element button appearance" } )
-bfUI.registerClientConfig( "element_button_disabled_color", Color( 125, 125, 125 ), "Disabled button colour within the theme", nil, { category = "element button appearance" } )
-bfUI.registerClientConfig( "element_button_hover_color", Color( 235, 235, 235 ), "Hovered button colour within the theme", nil, { category = "element button appearance" } )
-bfUI.registerClientConfig( "element_button_down_color", Color( 215, 215, 215 ), "Pressed down button colour within the theme", nil, { category = "element button appearance" } )
+-- Forces element button titles to be in UPPERCASE or not
+bfUI.registerUneditableConfig( 
+	{
+		id = "element_title_force_uppercase",
+		value = true
+	}
+)
 
-bfUI.registerClientConfig( "button_text_color", Color( 255, 255, 255 ), "Text colour within the theme", nil, { category = "button appearance" } )
-bfUI.registerClientConfig( "button_text_color_inverted", Color( 0, 0, 0 ), "Inverted text color within the theme", nil, { category = "button appearance" } )
-bfUI.registerClientConfig( "button_bg_color", Color( 255, 255, 255 ), "Button background color within the theme", nil, { category = "button appearance" } )
+-- Enforces the ability to set clientside customization
+bfUI.registerUneditableConfig( 
+	{
+		id = "can_edit_clientside_settings",
+		value = true
+	}
+)
 
-bfUI.registerClientConfig( "ask_on_close", true, "Whether to ask to close the frame when you press the close button", nil, { category = "general configuration", niceName = "Show prompt on quit" } )
+-- Clientside configurations. These are the things that the Client can modify in the OPTIONS menu.
 
-bfUI.registerClientConfig( "auto_open_on_join", true, "Whether Battlefront UI should auto-open on join", nil, { category = "general configuration", niceName = "Open on initial connection" } )
+-- Whether the avatar image is displayed at the top left.
+bfUI.registerClientConfig(
+	{
+		id = "show_avatar", 
+		value = true, 
+		description = "Whether avatar should be displayed",
+
+		-- Extra information
+		data = { 
+			category = "appearance", 
+			niceName = "Display avatars" 
+		} 
+	}
+)
+
+-- The theme's primary colour, that will dictate the button colours also.
+bfUI.registerClientConfig(
+	{
+		id = "main_color", 
+		value = Color( 230, 230, 230 ), 
+		description = "The theme's primary colour",
+
+		-- Extra information
+		data = { 
+			category = "appearance", 
+			niceName = "Theme primary color" 
+		} 
+	}
+)
+
+-- The theme's secondary color, for example when you hover over a button.
+bfUI.registerClientConfig(
+	{
+		id = "secondary_color", 
+		value = Color( 255, 200, 0 ), 
+		description = "The theme's secondary colour",
+
+		-- Extra information
+		data = { 
+			category = "appearance", 
+			niceName = "Theme secondary color" 
+		} 
+	}
+)
+
+-- The theme's background gradient colour. It's displayed when the image is out of your view, or you have the background disabled.
+bfUI.registerClientConfig(
+	{
+		id = "gradient_color", 
+		value = Color( 25, 25, 25 ), 
+		description = "The theme's gradient colour",
+
+		-- Extra information
+		data = { 
+			category = "appearance", 
+			niceName = "Theme gradient color" 
+		} 
+	}
+)
+
+-- The fade time with animations.
+bfUI.registerClientConfig(
+	{
+		id = "fade_time", 
+		value = 0.5, 
+		description = "Fade time for animations within the menu",
+
+		-- Extra information
+		data = { 
+			category = "appearance", 
+			niceName = "Fade time (general)" 
+		} 
+	}
+)
+
+-- The fade time with animations, but only when you press a section/element.
+bfUI.registerClientConfig(
+	{
+		id = "element_pressed_fade_time", 
+		value = 0.5, 
+		description = "Fade time for when you press an element button",
+
+		-- Extra information
+		data = { 
+			category = "appearance", 
+			niceName = "Fade time (section click)" 
+		} 
+	}
+)
+
+-- The primary font used within the module.
+bfUI.registerClientConfig(
+	{
+		id = "font", 
+		value = "Futura ICG", 
+		description = "The primary font",
+
+		-- Extra information
+		data = { 
+			category = "appearance", 
+			niceName = "Primary font" 
+		},
+
+		-- Do not edit this
+		callback = function()
+			hook.Call( "loadFonts" )
+		end
+	}
+)
+
+-- The secondary font used within the module.
+bfUI.registerClientConfig(
+	{
+		id = "font_secondary", 
+		value = "Roboto Condensed", 
+		description = "The secondary font",
+
+		-- Extra information
+		data = { 
+			category = "appearance", 
+			niceName = "Secondary font" 
+		},
+
+		-- Do not edit this
+		callback = function()
+			hook.Call( "loadFonts" )
+		end
+	}
+)
+
+--[[ 
+	As the description states, Whether to ask to close the frame when you press the close button. Using true will mean yes, and false will make it so it disappears
+	without a prompt. Please note that when you use the hotkey, there will never be a prompt.
+]]
+bfUI.registerClientConfig(
+	{
+		id = "ask_on_close", 
+		value = true, 
+		description = "Whether to ask to close the frame when you press the close button",
+
+		-- Extra information
+		data = { 
+			category = "general configuration", 
+			niceName = "Show prompt on quit" 
+		} 
+	}
+)
+
+-- This decides whether Battlefront UI will open when a player joins the server, for example like a Message of the Day.
+bfUI.registerClientConfig(
+	{
+		id = "auto_open_on_join", 
+		value = true, 
+		description = "Whether Battlefront UI should auto-open on join",
+
+		-- Extra information
+		data = { 
+			category = "general configuration", 
+			niceName = "Open on initial join" 
+		} 
+	}
+)
 
 bfUI.registerElement( "HOME", {
 	greeting = "WELCOME TO BATTLEFRONT UI, YOU CAN SPECIFY YOUR TEXT HERE.",
