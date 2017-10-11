@@ -51,7 +51,11 @@ end
 
 function bfUI.getClientData( var, fallbackVal )
     local curVal = bfUI.data.playerData[ var ]
-    return curVal or curVal == false and curVal or fallbackVal
+    if isbool( curVal ) then
+        return curVal
+    else
+        return curVal or fallbackVal
+    end
 end
 
 function bfUI.setClientData( var, val )
