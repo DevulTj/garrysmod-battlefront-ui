@@ -213,13 +213,17 @@ function FRAME:setUp()
         button:SetExpensiveShadow( 1, Color( 0, 0, 0, 185 ) )
 
         button.alpha = 0
-        button.Paint = function( pnl, w, h )
-            local color = pnl.isActive and Color( 230, 230, 230 ) or pnl:IsDown() and Color( 255, 160, 0 ) or pnl:IsHovered() and Color( 255, 200, 0 ) or Color( 175, 175, 175 )
+        button.Paint = function( self, w, h )
+            local pCol = bfUI.getClientData( "main_color", color_white )
+            local sCol = bfUI.getClientData( "secondary_color", Color( 255, 200, 0 ) )
+            local color = self.isActive and Color( pCol.r, pCol.g, pCol.b ) 
+                or self:IsDown() and Color( math.clampColor( sCol.r - 35 ), math.clampColor( sCol.g - 35 ), math.clampColor( sCol.b - 35 ) ) 
+                    or self:IsHovered() and sCol or Color( math.clampColor( pCol.r - 55 ), math.clampColor( pCol.g - 55 ), math.clampColor( pCol.b - 55 ) )
             local colorAlpha = 255
 
-            if not pnl.isActive and pnl:IsHovered() and (pnl.NextMove or 0) < CurTime() then
-                pnl:MoveToFront()
-                pnl.NextMove = CurTime() + 1
+            if not self.isActive and self:IsHovered() and (self.NextMove or 0) < CurTime() then
+                self:MoveToFront()
+                self.NextMove = CurTime() + 1
             end
 
             color = Color( color.r, color.g, color.b, colorAlpha )
@@ -228,7 +232,7 @@ function FRAME:setUp()
             surface.DrawRect( 0, 0, 2, h - 5 )
             surface.DrawRect( w - 2, 0, 2, h - 5 )
 
-            if pnl.isActive then
+            if self.isActive then
                 -- Left tip
                 surface.DrawRect( 0, h - 3, 2, 3 )
                 -- Right tip

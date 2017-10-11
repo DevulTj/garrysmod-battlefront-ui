@@ -216,6 +216,8 @@ local function attachText( parent, blockInfo )
         end
     end
 
+    local pCol = bfUI.getClientData( "main_color", color_white )
+
     local innerContainer = container:Add( "Panel" )
     innerContainer:Dock( FILL )
     innerContainer:DockMargin( 16, 16, 16, 16 )
@@ -225,7 +227,7 @@ local function attachText( parent, blockInfo )
     sub:SetFont( "bfUIMedium-Secondary" )
     sub:Dock( TOP )
     sub:SizeToContents()
-    sub:SetTextColor( color_white )
+    sub:SetTextColor( pCol )
     sub:SetExpensiveShadow( 2, Color( 0, 0, 0, 150 ) )
 
     local title = innerContainer:Add( "DLabel" )
@@ -235,7 +237,7 @@ local function attachText( parent, blockInfo )
     title:DockMargin( 0, 0, 80, 0 )
     title:SetContentAlignment( 7 )
     title:SetWrap( true )
-    title:SetTextColor( color_white )
+    title:SetTextColor( pCol )
     title:SetExpensiveShadow( 2, Color( 0, 0, 0, 150 ) )
 end
 
@@ -309,7 +311,7 @@ bfUI.addDataCheck( "greeting", function( data, frame )
     frame.greeting:DockMargin( 0, 0, 0, 8 )
     frame.greeting:SetText( data.greeting )
     frame.greeting:SetFont( "bfUILarge-Secondary" )
-    frame.greeting:SetTextColor( color_white )
+    frame.greeting:SetTextColor( bfUI.getClientData( "main_color", color_white ) )
     frame.greeting:SetExpensiveShadow( 1, Color( 0, 0, 0, 185 ) )
     frame.greeting:SizeToContents()
 end )
@@ -324,14 +326,16 @@ bfUI.addDataCheck( "currency", function( data, frame )
         button:Dock( RIGHT )
         button:SetWide( 128 )
         button:SetText( "" )
+
+        local pCol = bfUI.getClientData( "main_color", color_white )
         button.Paint = function( this, w, h )
             surface.SetMaterial( currencyInfo.image )
-            surface.SetDrawColor( color_white )
+            surface.SetDrawColor( pCol )
             surface.DrawTexturedRect( 0, 8, 16, 16 )
 
             local moneyText = currencyInfo.callback( LocalPlayer() ) or 0
 
-            draw.SimpleText( moneyText, "bfUIMedium-Secondary", w / 2, h / 2 + 1, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+            draw.SimpleText( moneyText, "bfUIMedium-Secondary", w / 2, h / 2 + 1, pCol, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
             //draw.SimpleText( moneyText, "bfUIMedium-Secondary-Blurred", w / 2, h / 2, Color( 255, 255, 255, 150 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
         end
     end

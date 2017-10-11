@@ -14,8 +14,13 @@ function PANEL:createCategoryButton( parent, categoryId, categoryInfo )
     button:SetText( "" )
     button:SetSize( 350, 250 )
 
-    button.Paint = function( this, w, h ) 
-        local color = this.isActive and Color( 230, 230, 230 ) or this:IsDown() and Color( 255, 160, 0 ) or this:IsHovered() and Color( 255, 200, 0 ) or Color( 175, 175, 175 )
+    button.Paint = function( self, w, h )   
+        local pCol = bfUI.getClientData( "main_color", color_white )
+        local sCol = bfUI.getClientData( "secondary_color", Color( 255, 200, 0 ) )
+        local color = self.isActive and Color( pCol.r, pCol.g, pCol.b ) 
+            or self:IsDown() and Color( math.clampColor( sCol.r - 35 ), math.clampColor( sCol.g - 35 ), math.clampColor( sCol.b - 35 ) ) 
+                or self:IsHovered() and sCol or Color( math.clampColor( pCol.r - 55 ), math.clampColor( pCol.g - 55 ), math.clampColor( pCol.b - 55 ) )
+                
         local colorAlpha = 255
 
         color = Color( color.r, color.g, color.b, colorAlpha )
@@ -93,7 +98,7 @@ function PANEL:addBoolean( parent, value )
     button:SetWide( 256 )
 
     button.Paint = function( this, w, h )
-        local activeColor = Color( 255, 255, 255, 255 )
+        local activeColor = bfUI.getClientData( "main_color", color_white )
         local notActiveColor = Color( 0, 0, 0, 255 )
 
         local desiredBoxColor = value and Color( activeColor.r, activeColor.g, activeColor.b, 200 ) or Color( notActiveColor.r, notActiveColor.g, notActiveColor.b, 100 )
@@ -247,7 +252,7 @@ function PANEL:fillOptions( categoryId )
         button:SetTall( 40 )
 
         button.Paint = function( this, w, h )
-            local color = this:IsHovered() and Color( 255, 200, 0 ) or Color( 235, 235, 235 )
+            local color = this:IsHovered() and bfUI.getClientData( "secondary_color", Color( 255, 200, 0 ) ) or bfUI.getClientData( "main_color", color_white )
             local colorAlpha = 255
 
             color = Color( color.r, color.g, color.b, colorAlpha )
@@ -289,15 +294,16 @@ function PANEL:viewOptions( categoryId, categoryInfo )
         self.header:SetTall( 40 )
 
         self.header.Paint = function( this, w, h )
+            local pCol = bfUI.getClientData( "main_color", color_white )
             if categoryInfo.image then
                 -- Icon image
                 surface.SetMaterial( categoryInfo.image )
-                surface.SetDrawColor( color_white )
+                surface.SetDrawColor( pCol )
                 surface.DrawTexturedRect( 0, 0, 40, 40 )
             end
 
-            draw.SimpleText( categoryInfo.name, "bfUIMediumLarge-Secondary-Blurred", 48, h / 2, Color( 255, 255, 255, 150 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
-            draw.SimpleText( categoryInfo.name, "bfUIMediumLarge-Secondary", 48, h / 2, color_white, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+            draw.SimpleText( categoryInfo.name, "bfUIMediumLarge-Secondary-Blurred", 48, h / 2, Color( pCol.r, pCol.g, pCol.b, 150 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+            draw.SimpleText( categoryInfo.name, "bfUIMediumLarge-Secondary", 48, h / 2, pCol, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
         end
 
         self.footer = self.panel:Add( "Panel" )

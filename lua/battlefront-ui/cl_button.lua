@@ -16,8 +16,16 @@ end
 local topRight = Material( "bfui/button/button_topright.png" )
 local topRightW, topRightH = 16, 16
 
+function math.clampColor( val )
+    return math.Clamp( val, 0, 255 )
+end
+
 function BUTTON:Paint( w, h )
-    local color = self.isActive and Color( 230, 230, 230 ) or self:IsDown() and Color( 255, 160, 0 ) or self:IsHovered() and Color( 255, 200, 0 ) or Color( 175, 175, 175 )
+    local pCol = bfUI.getClientData( "main_color", color_white )
+    local sCol = bfUI.getClientData( "secondary_color", Color( 255, 200, 0 ) )
+    local color = self.isActive and Color( pCol.r, pCol.g, pCol.b ) 
+        or self:IsDown() and Color( math.clampColor( sCol.r - 35 ), math.clampColor( sCol.g - 35 ), math.clampColor( sCol.b - 35 ) ) 
+            or self:IsHovered() and sCol or Color( math.clampColor( pCol.r - 55 ), math.clampColor( pCol.g - 55 ), math.clampColor( pCol.b - 55 ) )
     local colorAlpha = 255
 
     color = Color( color.r, color.g, color.b, colorAlpha )

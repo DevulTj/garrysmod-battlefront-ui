@@ -24,7 +24,8 @@ bfUI.registerUneditableConfig( "element_title_force_uppercase", true ) -- Forces
 bfUI.registerUneditableConfig( "can_edit_clientside_settings", true ) -- Enforces the ability to set clientside customization
 bfUI.registerClientConfig( "show_avatar", true, "Whether avatar should be displayed", nil, { category = "appearance", niceName = "Display avatars" } ) -- Show avatar button
 
-bfUI.registerClientConfig( "main_color", Color( 230, 230, 230 ), "The theme's main colour", nil, { category = "appearance", niceName = "Theme primary color" } )
+bfUI.registerClientConfig( "main_color", Color( 230, 230, 230 ), "The theme's primary colour", nil, { category = "appearance", niceName = "Theme primary color" } )
+bfUI.registerClientConfig( "secondary_color", Color( 255, 200, 0 ), "The theme's secondary colour", nil, { category = "appearance", niceName = "Theme secondary color" } )
 bfUI.registerClientConfig( "gradient_color", Color( 25, 25, 25 ), "The theme's gradient main colour", nil, { category = "appearance", niceName = "Theme gradient color" } )
 bfUI.registerClientConfig( "fade_time", 0.5, "Fade time for animations within the theme", nil, { category = "appearance", niceName = "Fade time (general)" } )
 bfUI.registerClientConfig( "element_pressed_fade_time", 0.5, "Fade time for when you press an element button", nil, { category = "appearance", niceName = "Fade time (section click)" } )
