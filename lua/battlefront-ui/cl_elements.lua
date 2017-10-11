@@ -309,18 +309,6 @@ function FRAME:setUp()
     -- Render avatar layout
     self:showAvatar()
 
-    -- Render WIP
-    self.warning = self:Add( "DButton" )
-    self.warning:SetSize( 256, 40 )
-    self.warning:SetPos( self:GetWide() - 256 - 100, 96 )
-    self.warning:SetText( "WORK IN PROGRESS" )
-    self.warning:SetFont( "bfUISmall-Secondary" )
-    self.warning:SetTextColor( color_white )
-    self.warning.Paint = function( this, w, h )
-        draw.RoundedBox( 8, 0, 0, w, h, Color( 20, 20, 20, 100 ) )
-    end
-    
-
     local firstElement = bfUI.config.ELEMENTS[ 1 ]
     if firstElement then 
         bfUI.getCallback( firstElement, self )
