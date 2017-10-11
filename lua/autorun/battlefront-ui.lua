@@ -33,5 +33,5 @@ end
 findInFolder( "battlefront-ui/" )
 
 if SERVER then
-	-- resource.AddWorkshop( "761352831" ) -- prepare content pack
+	resource.AddWorkshop( "1165844047" )
 end

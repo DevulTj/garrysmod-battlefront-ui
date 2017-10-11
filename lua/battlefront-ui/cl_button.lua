@@ -46,13 +46,8 @@ function BUTTON:Paint( w, h )
     -- Right bar
     surface.DrawRect( w - 2, topRightH, 2, h - topRightH )
 
-
-    //draw.RoundedBox( 8, 0, 0, w, h, color )
-    //draw.RoundedBox( 8, 2, 2, w - 4, h - 4, Color( 10, 10, 10, 255 ) )
-
     draw.SimpleText( self:GetText(), "bfUIMedium-Secondary", w / 2, h / 2, Color( color.r, color.g, color.b, 150 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
     draw.SimpleText( self:GetText(), "bfUIMedium-Secondary-Blurred", w / 2, h / 2, Color( color.r, color.g, color.b, 150 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-
 end
 
 derma.DefineControl( "bfUIButton", nil, BUTTON, "DButton" )
