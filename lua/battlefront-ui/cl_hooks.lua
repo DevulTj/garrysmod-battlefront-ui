@@ -6,7 +6,7 @@
     Developer information: {{ user_id }} : {{ script_id }} : {{ script_version_id }}
 ]]--
 
-hook.Add( "PlayerButtonUp", "dThirdPerson_keyBind", function( player, buttonId )
+hook.Add( "PlayerButtonUp", "bfUI_keybinds", function( player, buttonId )
 	if not IsFirstTimePredicted() then return end
 	if player ~= LocalPlayer() then return end
 	if gui.IsGameUIVisible() then return end
