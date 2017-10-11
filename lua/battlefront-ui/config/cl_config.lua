@@ -107,14 +107,14 @@ bfUI.registerElement( "STAFF", {
 bfUI.registerElement( "SERVERS", {
 	servers = {
 		[ "DARKRP" ] = {
-			icon = Material( "bfuiserver_icon.png" ),
+			icon = Material( "bfui/server_icon.png" ),
 			ip = "89.34.97.159",
 			desc = "One of our servers.",
 
 			joinText = "JOIN"
 		},
 		[ "TTT" ] = {
-			icon = Material( "bfuiserver_icon_2.png" ),
+			icon = Material( "bfui/server_icon_2.png" ),
 			ip = "89.34.97.159",
 			desc = "Another one of our servers.",
 
