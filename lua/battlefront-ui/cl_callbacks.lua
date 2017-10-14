@@ -316,6 +316,11 @@ bfUI.addDataCheck( "greeting", function( data, frame )
     frame.greeting:SizeToContents()
 end )
 
+local funcs = {
+    darkrp = function( player ) return player.getDarkRPVar and player:getDarkRPVar( "money", 0 ) or 20 end,
+    pointshop = function( player ) return player.PS_GetPoints and player:PS_GetPoints() or 10 end
+}
+
 bfUI.addDataCheck( "currency", function( data, frame )
     frame.currencyLayout = frame:Add( "Panel" )
     frame.currencyLayout:SetSize( 400, 32 )
@@ -333,7 +338,14 @@ bfUI.addDataCheck( "currency", function( data, frame )
             surface.SetDrawColor( pCol )
             surface.DrawTexturedRect( 0, 8, 16, 16 )
 
-            local moneyText = currencyInfo.callback( LocalPlayer() ) or 0
+            local moneyText
+            if currencyInfo.darkrp then
+                moneyText = funcs.darkrp( LocalPlayer() ) or 30
+            elseif currencyInfo.pointshop then
+                moneyText = funcs.pointshop( LocalPlayer() ) or 20
+            else
+                moneyText = currencyInfo.callback( LocalPlayer() ) or 0
+            end
 
             draw.SimpleText( moneyText, "bfUIMedium-Secondary", w / 2, h / 2 + 1, pCol, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
             //draw.SimpleText( moneyText, "bfUIMedium-Secondary-Blurred", w / 2, h / 2, Color( 255, 255, 255, 150 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )

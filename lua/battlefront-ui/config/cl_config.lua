@@ -257,7 +257,9 @@ bfUI.registerElement( "HOME", {
 	currency = {
 		{
 			image = Material( "bfui/money.png" ),
-			callback = function( player ) return player.getDarkRPVar and player:getDarkRPVar( "money", 0 ) or 0 end
+			-- image = Material( "bfui/creditcard.png" ),
+			darkrp = true,
+			--pointshop = true,
 		}
 	}
 })
