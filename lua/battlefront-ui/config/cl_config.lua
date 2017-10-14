@@ -260,7 +260,13 @@ bfUI.registerElement( "HOME", {
 			-- image = Material( "bfui/creditcard.png" ),
 			darkrp = true,
 			--pointshop = true,
-		}
+		},
+		--[[
+		{
+			image = Material( "bfui/creditcard.png" ),
+			pointshop = true,
+		},
+		]]
 	}
 })
 
