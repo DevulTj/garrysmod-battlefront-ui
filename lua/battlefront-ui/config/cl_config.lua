@@ -300,6 +300,17 @@ bfUI.registerElement( "STAFF", {
 	}
 })
 
+--[[
+	Servers element:
+	You can register new servers by adding a new entry to the servers table, the design is like so:
+
+	[ "Server Name" ] = {
+		icon = Material( "my/path/to/icon.png" ),
+		ip = "x.x.x.x", -- Server IP is important, it's used to connect to the server.
+		desc = "Description of the server.",
+		joinText = "JOIN THE SERVER", -- Replacement text for the join button.
+	}
+]]
 bfUI.registerElement( "SERVERS", {
 	servers = {
 		[ "DARKRP" ] = {
@@ -320,9 +331,20 @@ bfUI.registerElement( "SERVERS", {
 })
 
 bfUI.registerElement( "RULES", {
+	-- This dictates whether a website should load here.
 	showURL = "https://google.co.uk"
 })
 
+--[[ 
+	-- This shows a donation page URL which you can uncomment and set your own URL for.
+
+	bfUI.registerElement( "DONATE", {
+		-- This dictates whether a website should load here.
+		showURL = "https://google.co.uk"
+	})
+]]
+
 bfUI.registerElement( "OPTIONS", {
+	-- This dictates whether the options menu should show here.
 	options = true
 } )
