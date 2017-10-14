@@ -48,7 +48,7 @@ bfUI.registerUneditableConfig(
 bfUI.registerUneditableConfig( 
 	{
 		id = "background_material", 
-		value = Material( "bfui/background_1.jpg" )
+		value = Material( "bfui/bfui_background.jpg" )
 	} 
 )
 
