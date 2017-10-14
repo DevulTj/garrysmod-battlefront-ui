@@ -48,8 +48,6 @@ function FRAME:fadeIn()
 
     self.fadingIn = true
 
-    self:refreshBackground()
-
     self:SetAlpha( 0 )
     self:AlphaTo( 255, bfUI.getClientData( "fade_time", 0.5 ), 0, function()
         self.fadingIn = false
@@ -74,18 +72,6 @@ function FRAME:Think()
     if input.IsKeyDown( bfUI.getClientData( "menu_key", KEY_F6 ) ) then 
         self:fadeOut()
     end
-end
-
-function FRAME:refreshBackground()
-    if bfUI.getUnEditableData( "background_material_disabled", false ) then return end
-
-    local backgroundMaterial = bfUI.getUnEditableData( "background_material", "bfui/bfui_background.jpg" )
-
-    if istable( backgroundMaterial ) then
-        backgroundMaterial = table.Random( backgroundMaterial )
-    end
-
-    self.backgroundMaterial = Material( backgroundMaterial )
 end
 
 function FRAME:showAvatar()
@@ -142,8 +128,6 @@ function FRAME:showAvatar()
 end
 
 function FRAME:setUp()
-    self:refreshBackground()
-
     self.background = self:Add( "DPanel" )
     self.background:SetSize( self:GetWide() * 3, self:GetTall() )
 
@@ -154,9 +138,9 @@ function FRAME:setUp()
         draw.RoundedBox( 0, 0, 0, w, h, bfUI.getClientData( "main_color", color_black ) )
         draw.RoundedBox( 0, scrW, 0, w - scrW, h, gradientCol )
 
-        if self.backgroundMaterial then
+        if not bfUI.getUnEditableData( "background_material_disabled", false ) then
             surface.SetDrawColor( Color( 255, 255, 255, self:GetAlpha() ) )
-            surface.SetMaterial( self.backgroundMaterial )
+            surface.SetMaterial( bfUI.getUnEditableData( "background_material", Material( "bfui/bfui_background.jpg" ) ) )
             surface.DrawTexturedRect( 0, 0, scrW, scrH )
         end
 
