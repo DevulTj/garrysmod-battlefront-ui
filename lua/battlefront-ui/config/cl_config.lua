@@ -290,7 +290,13 @@ bfUI.registerElement( "STAFF", {
 		[ "founder" ] = {
 			name = "Founder",
 			color = Color( 235, 51, 51 ),
-		}
+		},
+		--[[
+		[ "vip" ] = {
+			name = "VIP",
+			color = Color( 255, 200, 0 ),
+		},
+		]]
 	}
 })
 
