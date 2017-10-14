@@ -322,6 +322,10 @@ local funcs = {
 }
 
 bfUI.addDataCheck( "currency", function( data, frame )
+    if IsValid( frame.currencyLayout ) then
+        frame.currencyLayout:Remove()
+    end
+    
     frame.currencyLayout = frame:Add( "Panel" )
     frame.currencyLayout:SetSize( 400, 32 )
     frame.currencyLayout:SetPos( frame:GetWide() - frame.currencyLayout:GetWide() - 52, 32 )
